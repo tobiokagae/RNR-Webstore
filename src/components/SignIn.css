@@ -1,0 +1,100 @@
+/* General styling for Sign In page */
+.signin-form-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.7); 
+}
+
+.modal-title {
+  font-size: 28px;
+  font-weight: bold;
+  color: white;
+  margin-bottom: 20px;
+}
+
+.signin-form {
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  padding: 40px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  width: 90%; /* Membuat formulir lebih fleksibel */
+  max-width: 400px;
+}
+
+.input-group {
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.input-group label {
+  margin-bottom: 5px;
+  font-size: 16px;
+  color: #333;
+}
+
+.input-group input {
+  padding: 12px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 100%;
+}
+
+.actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.help-link {
+  color: #007bff;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.submit-btn {
+  background-color: #007bff;
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.submit-btn:hover {
+  background-color: #0056b3;
+}
+
+.register-link {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 14px;
+  color: #007bff;
+  cursor: pointer;
+}
+
+/* Responsiveness for mobile devices */
+@media (max-width: 600px) {
+  .signin-form {
+    width: 100%;
+    padding: 20px;
+  }
+
+  .modal-title {
+    font-size: 24px;
+  }
+
+  .submit-btn {
+    font-size: 14px;
+    padding: 8px 16px;
+  }
+}

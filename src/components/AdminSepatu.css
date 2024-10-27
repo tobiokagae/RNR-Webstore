@@ -1,0 +1,88 @@
+.admin-sepatu {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  min-height: 100vh;
+  background-color: #f0f2f5;
+  font-family: Arial, sans-serif;
+}
+
+.admin-sepatu h1 {
+  font-size: 32px;
+  margin-bottom: 25px;
+  color: #333;
+  font-weight: bold;
+}
+
+.admin-sepatu div {
+  margin-bottom: 20px;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.admin-sepatu input {
+  padding: 12px;
+  margin-right: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  width: 150px;
+  outline: none;
+  transition: all 0.3s;
+}
+
+.admin-sepatu input:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+.admin-sepatu button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+  font-weight: bold;
+}
+
+.admin-sepatu button:hover {
+  background-color: #0056b3;
+  transform: scale(1.05);
+}
+
+.admin-sepatu table {
+  width: 90%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  background-color: #fff;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.admin-sepatu th, .admin-sepatu td {
+  padding: 12px 15px;
+  text-align: center;
+  border-bottom: 1px solid #ddd;
+  color: #333;
+}
+
+.admin-sepatu th {
+  background-color: #007bff;
+  color: #fff;
+  font-weight: bold;
+}
+
+.admin-sepatu tbody tr:hover {
+  background-color: #f1f1f1;
+  transition: background-color 0.2s;
+}
+
+.admin-sepatu button:active {
+  transform: scale(0.95);
+}
+

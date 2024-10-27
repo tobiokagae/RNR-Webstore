@@ -1,0 +1,84 @@
+/* src/components/Cart.css */
+.cart-page {
+    padding: 20px;
+    background-color: #f9f9f9;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .cart-items {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center align all the cart items */
+    width: 100%;
+  }
+  
+  .cart-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Spread items in the card */
+    margin-bottom: 20px;
+    background-color: white;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    width: 80%; /* Reduce width to keep the card centered and not too wide */
+    max-width: 800px; /* Max width to control card size */
+  }
+  
+  .cart-item-image {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    margin-right: 20px;
+  }
+  
+  .cart-item-details {
+    flex-grow: 1;
+  }
+  
+  .cart-item-details h3 {
+    margin: 0;
+    font-size: 18px;
+    color: black;
+  }
+  
+  .cart-item-details p {
+    margin: 5px 0;
+  }
+  
+  .cart-item-actions {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .buy-btn {
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 1em;
+    margin-bottom: 10px;
+  }
+  
+  .buy-btn:hover {
+    background-color: #45a049;
+  }
+  
+  .delete-btn {
+    background-color: #ff4d4f;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 1em;
+  }
+  
+  .delete-btn:hover {
+    background-color: #ff1a1f;
+  }
+  

@@ -1,0 +1,101 @@
+/* Basic reset */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Arial', sans-serif;
+  background: radial-gradient(circle at center, #121212, #333);
+  color: white;
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  background-color: #00000070;
+}
+
+.logo {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.menu {
+  display: flex;
+  gap: 20px;
+}
+
+.menu-item {
+  text-decoration: none;
+  color: white;
+  padding: 10px 20px;
+  font-size: 16px;
+  transition: background 0.3s ease;
+}
+
+.menu-item:hover {
+  background: #fefdfd10;
+  border-radius: 8px;
+}
+
+.auth-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.signin, .signup {
+  background: transparent;
+  border: 2px solid white;
+  color: white;
+  padding: 10px 15px;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: background 0.3s ease;
+}
+
+.signin:hover, .signup:hover {
+  background: white;
+  color: black;
+}
+
+.hero {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: calc(100vh - 100px);
+  padding: 0 50px;
+}
+
+.text-container {
+  max-width: 600px;
+}
+
+.title {
+  font-size: 50px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.description {
+  font-size: 18px;
+  line-height: 1.5;
+  color: #dddddd;
+}
+
+.image-container img {
+  width: 500px;
+  height: auto;
+}
+
+.cart-logo {
+  width: 30px;
+  height: 30px;
+  background-color: white;
+}
