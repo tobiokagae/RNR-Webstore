@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
-import './SignIn.css';
 
 function SignIn({ onLogin }) {
   const [credentials, setCredentials] = useState({ username: '', password: '' });
@@ -19,9 +18,9 @@ function SignIn({ onLogin }) {
       if (response.status === 200) {
         onLogin(response.data.username);
         if (response.data.role === 'Admin') {
-          navigate('/admin'); // Mengarahkan ke halaman admin jika role adalah Admin
+          navigate('/admin');
         } else {
-          navigate('/'); // Mengarahkan ke halaman home jika bukan Admin
+          navigate('/');
         }
       }
     } catch (error) {
@@ -31,26 +30,56 @@ function SignIn({ onLogin }) {
   };
 
   return (
-    <div className="signin-form-container">
-      <h2 className="modal-title">Sign In</h2>
-      <Link to="/signin-admin" className="admin-button">
-        <button>Go to Admin</button>
-      </Link>
-      <form className="signin-form" onSubmit={handleSubmit}>
-        <div className="input-group">
-          <label htmlFor="username">Username</label>
-          <input type="text" id="username" name="username" placeholder="Username" onChange={handleChange} />
-        </div>
-        <div className="input-group">
-          <label htmlFor="password">Password</label>
-          <input type="password" id="password" name="password" placeholder="Password" onChange={handleChange} />
-        </div>
-        <div className="actions">
-          <p className="help-link">Need Help?</p>
-          <button type="submit" className="submit-btn">Log In</button>
-        </div>
-      </form>
-      <p className='sign-in'>Do you have an account?<a href="/signup">Register</a></p>
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-radial from-gray-800 via-gray-700 to-black">
+      <div className="bg-white p-10 rounded-lg shadow-lg w-full max-w-md">
+        <h1 className="text-3xl font-extrabold mb-2 text-center text-gray-800">Welcome Back!</h1>
+        <h2 className="text-xl font-semibold mb-6 text-center text-gray-600">Please sign in to continue</h2>
+        
+        <Link to="/signin-admin" className="block text-center mb-4">
+          <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded shadow-md transition duration-300 transform hover:scale-105">
+            Go to Admin
+          </button>
+        </Link>
+
+            <form className="space-y-5" onSubmit={handleSubmit}>
+          <div className="flex flex-col">
+            <label htmlFor="username" className="mb-1 font-semibold text-gray-700">Username</label>
+            <input
+              type="text"
+              id="username"
+              name="username"
+              placeholder="Enter your username"
+              onChange={handleChange}
+              className="border border-gray-300 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-gray-900 placeholder-gray-500"
+            />
+          </div>
+          <div className="flex flex-col">
+            <label htmlFor="password" className="mb-1 font-semibold text-gray-700">Password</label>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              placeholder="Enter your password"
+              onChange={handleChange}
+              className="border border-gray-300 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-gray-900 placeholder-gray-500"
+            />
+          </div>
+          <div className="flex justify-between items-center mt-3">
+            <Link to="/forgot-password" className="text-sm text-blue-500 hover:underline">Need Help?</Link>
+            <button
+              type="submit"
+              className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-lg shadow-lg transition duration-300 transform hover:scale-105"
+            >
+              Log In
+            </button>
+          </div>
+        </form>
+
+
+        <p className="mt-8 text-center text-gray-700">
+          Don’t have an account? <Link to="/signup" className="text-blue-500 hover:underline">Register</Link>
+        </p>
+      </div>
     </div>
   );
 }

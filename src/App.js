@@ -10,24 +10,30 @@ import Cart from "./components/Cart";
 import Admin from './components/Admin';
 import Payment from "./components/Payment";
 import SignUpAdmin from './components/SignUpAdmin';
+
 import AdminSepatu from './components/AdminSepatu';
 import AdminUser from './components/AdminUser';
-
+import AdminPayments from './components/AdminPayments';
+import AdminGallery from './components/AdminGallery';
+import AdminCarts from './components/AdminCarts';
+import AdminWishlists from './components/AdminWishlists';
+import AdminInteractions from './components/AdminInteractions';
 import AdminSepatuDetail from './components/AdminSepatuDetail';
+
 import SignInAdmin from './components/SignInAdmin';
 
 function App() {
   const [user, setUser] = useState(null);
-  const [role, setRole] = useState(null); // Menambahkan state untuk role
+  const [role, setRole] = useState(null); // State for user role
 
   const handleLogin = (username, userRole) => {
     setUser(username);
-    setRole(userRole); // Menyimpan role pengguna
+    setRole(userRole); // Store user role
   };
 
   const handleLogout = () => {
     setUser(null);
-    setRole(null); // Menghapus state role
+    setRole(null); // Clear user role
   };
 
   return (
@@ -35,7 +41,7 @@ function App() {
       <div className="App">
         <header className="navbar">
           <div className="logo">R&R</div>
-          {/* Menampilkan menu hanya jika role bukan Admin */}
+          {/* Display menu only if role is not Admin */}
           {role !== 'Admin' && (
             <nav className="menu">
               <Link to="/" className="menu-item">Home</Link>
@@ -67,7 +73,6 @@ function App() {
 
         {/* Main content for each route */}
         <Routes>
-          {/* Home route */}
           <Route
             path="/"
             element={
@@ -90,34 +95,24 @@ function App() {
               </section>
             }
           />
-
-          {/* Categories route */}
           <Route path="/categories" element={<Categories />} />
-
-          {/* Sale route */}
           <Route path="/sale" element={<Sale />} />
-
-          {/* Sign In route */}
           <Route path="/signin" element={<SignIn onLogin={handleLogin} />} />
-
-          {/* Sign Up route */}
           <Route path="/signup" element={<SignUp />} />
-            
-          {/* Admin route */}
           <Route path="/admin" element={<Admin />} />
-
           <Route path="/signup-admin" element={<SignUpAdmin />} />
-          
-          {/* ShoeDetail route - dynamic */}
           <Route path="/admin/categories" element={<AdminSepatu />} />
           <Route path="/admin/shoes" element={<AdminSepatuDetail />} />
           <Route path="/admin/users" element={<AdminUser />} />
+          <Route path="/admin/payments" element={<AdminPayments />} />
+          <Route path="/admin/gallery" element={<AdminGallery />} />
+          <Route path="/admin/carts" element={<AdminCarts />} />
+          <Route path="/admin/wishlists" element={<AdminWishlists />} />
+          <Route path="/admin/interactions" element={<AdminInteractions />} />
           <Route path="/shoes/:id" element={<ShoeDetail />} />
-          
           <Route path="/cart" element={<Cart />} />
           <Route path="/payment/:id" element={<Payment />} />
           <Route path="/signin-admin" element={<SignInAdmin onLogin={handleLogin} />} />
-          
         </Routes>
       </div>
     </Router>

@@ -1,4 +1,3 @@
-import './SignUp.css';
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
@@ -27,7 +26,7 @@ function SignUp() {
       const response = await axios.post('http://localhost:5000/api/users/register', formData);
       alert(response.data.message);
       if (response.status === 200) {
-        navigate('/signin'); // Mengarahkan ke halaman sign in setelah sign up berhasil
+        navigate('/signin');
       }
     } catch (error) {
       console.error('Error:', error);
@@ -36,24 +35,61 @@ function SignUp() {
   };
 
   return (
-    <div className="signup-container">
-      <div className="signup-content">
-        <div className="signup-image">
-          <img src="/images/adidas_trail_run.png" alt="Shoes" />
+    <div className="flex items-center justify-center min-h-screen bg-gradient-radial from-gray-800 via-gray-700 to-black">
+      <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-2xl flex flex-col md:flex-row">
+        <div className="md:w-1/2 flex justify-center items-center mb-4 md:mb-0">
+          <img src="/images/adidas_trail_run.png" alt="Shoes" className="w-full h-auto rounded" />
         </div>
-        <div className="signup-form">
-          <h2>Sign Up Now</h2>
-          <form onSubmit={handleSubmit}>
-            <input type="text" name="username" placeholder="Username" required onChange={handleChange} />
-            <input type="password" name="password" placeholder="Password" required onChange={handleChange} />
-            <input type="email" name="email" placeholder="Email" required onChange={handleChange} />
-            <input type="text" name="firstName" placeholder="First Name" onChange={handleChange} />
-            <input type="text" name="lastName" placeholder="Last Name" onChange={handleChange} />
-            <button type="submit" className="signup-button-1">Sign Up</button>
+        <div className="md:w-1/2 text-gray-900">
+          <h2 className="text-2xl font-bold mb-6 text-center">Sign Up Now</h2>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <input
+              type="text"
+              name="username"
+              placeholder="Username"
+              required
+              onChange={handleChange}
+              className="w-full bg-gray-200 text-gray-900 border border-gray-600 p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+            <input
+              type="password"
+              name="password"
+              placeholder="Password"
+              required
+              onChange={handleChange}
+              className="w-full bg-gray-200 text-gray-900 border border-gray-600 p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+            <input
+              type="email"
+              name="email"
+              placeholder="Email"
+              required
+              onChange={handleChange}
+              className="w-full bg-gray-200 text-gray-900 border border-gray-600 p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+            <input
+              type="text"
+              name="firstName"
+              placeholder="First Name"
+              onChange={handleChange}
+              className="w-full bg-gray-200 text-gray-900 border border-gray-600 p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+            <input
+              type="text"
+              name="lastName"
+              placeholder="Last Name"
+              onChange={handleChange}
+              className="w-full bg-gray-200 text-gray-900 border border-gray-600 p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+            <button type="submit" className="w-full bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+              Sign Up
+            </button>
           </form>
-          <p className='sign-in'>Already have a Roots&Routes account? <a href="/signin">Log In</a></p>
-          <p className="terms">
-            By signing up, I agree to Roots&Routes's <a href="/">Terms & Conditions</a> and <a href="/">Privacy Policy</a>.
+          <p className="mt-4 text-center">
+            Already have a Roots&Routes account? <a href="/signin" className="text-blue-400">Log In</a>
+          </p>
+          <p className="mt-2 text-center text-sm text-gray-500">
+            By signing up, I agree to Roots&Routes's <a href="/" className="text-blue-400">Terms & Conditions</a> and <a href="/" className="text-blue-400">Privacy Policy</a>.
           </p>
         </div>
       </div>

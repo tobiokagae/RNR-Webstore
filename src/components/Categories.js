@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import './Categories.css';
 
 function Categories() {
   const [showRecommendations, setShowRecommendations] = useState(false);
@@ -21,28 +20,28 @@ function Categories() {
   };
 
   const handleSearchBlur = () => {
-    setTimeout(() => setShowRecommendations(false), 100); // Menggunakan delay kecil agar tetap bisa klik rekomendasi
+    setTimeout(() => setShowRecommendations(false), 100);
   };
 
   return (
-    <div className="categories-page">
-      <h2 className="best-product-title">Best Product R&R</h2>
-      <div className="search-container">
+    <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800 text-white flex flex-col items-center">
+      <h2 className="text-2xl font-bold text-center mb-5">Best Product R&R</h2>
+      <div className="relative flex justify-center items-center mb-8 w-full">
         <input
           type="text"
           placeholder="Cari di R&R"
-          className="search-bar"
+          className="flex p-2 w-full max-w-lg rounded-lg border-none shadow-lg"
           onFocus={handleSearchFocus}
           onBlur={handleSearchBlur}
         />
         {showRecommendations && (
-          <div className="recommendation-box">
-            <p className="recommendation-title">Recommended for you</p>
-            <ul className="recommendation-list">
+          <div className="absolute top-12 left-1/2 transform -translate-x-1/2 bg-white text-black w-full max-w-lg rounded-lg p-3 shadow-lg z-10">
+            <p className="font-bold text-sm mb-2">Recommended for you</p>
+            <ul className="list-none p-0">
               {recommendations.map(item => (
-                <li key={item.id} className="recommendation-item">
-                  <Link to={`/shoes/${item.id}`}>
-                    <img src={item.image} alt={item.name} className="recommendation-image" />
+                <li key={item.id} className="flex items-center py-1">
+                  <Link to={`/shoes/${item.id}`} className="flex items-center">
+                    <img src={item.image} alt={item.name} className="w-10 h-10 mr-2" />
                     <span>{item.name}</span>
                   </Link>
                 </li>
@@ -52,19 +51,19 @@ function Categories() {
         )}
       </div>
 
-      <div className="product-grid">
+      <div className="flex justify-center gap-8 flex-wrap mb-8">
         {products.map(product => (
-          <div key={product.id} className="product-card">
+          <div key={product.id} className="bg-gray-800 rounded-lg p-4 text-center relative w-60 transform transition-transform duration-300 hover:scale-105 hover:shadow-xl">
             <Link to={`/shoes/${product.id}`}>
-              <img src={product.image} alt={product.name} className="product-image" />
-              <div className="product-details">
-                <span className="product-category">{product.category}</span>
-                <h3 className="product-name">{product.name}</h3>
-                <p className="product-price">{product.price.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' })}</p>
+              <img src={product.image} alt={product.name} className="w-full h-auto rounded-lg mb-4" />
+              <div className="mb-2">
+                <span className="text-sm text-gray-400">{product.category}</span>
+                <h3 className="text-lg font-bold">{product.name}</h3>
+                <p className="text-md mt-1">{product.price.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' })}</p>
               </div>
             </Link>
-            <button className="wishlist-btn"><i className="fas fa-heart"></i></button>
-            <button className="cart-btn"><i className="fas fa-plus"></i></button>
+            <button className="absolute top-4 right-4 text-white text-lg hover:text-yellow-500"><i className="fas fa-heart"></i></button>
+            <button className="absolute bottom-4 right-4 text-white text-xl hover:text-yellow-500"><i className="fas fa-plus"></i></button>
           </div>
         ))}
       </div>

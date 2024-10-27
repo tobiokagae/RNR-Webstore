@@ -76,7 +76,7 @@ function AdminSepatu() {
   };
 
   return (
-    <div className="bg-gray-900 text-white min-h-screen flex flex-col items-center p-8">
+    <div className="bg-black text-white min-h-screen flex flex-col items-center p-8">
       <h1 className="text-3xl font-bold mb-6">Daftar Kategori Sepatu</h1>
       <div className="flex space-x-3 mb-6">
         <input
@@ -84,7 +84,7 @@ function AdminSepatu() {
           placeholder="Nama Kategori Baru"
           value={newCategory}
           onChange={(e) => setNewCategory(e.target.value)}
-          className="p-2 border rounded-md bg-gray-700 text-white placeholder-gray-400"
+          className="p-2 border rounded-md bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
         <button 
           onClick={handleCreateCategory}
@@ -93,9 +93,9 @@ function AdminSepatu() {
           Create Category
         </button>
       </div>
-      <table className="table-auto w-full bg-gray-800 text-white rounded-lg shadow-md">
+      <table className="min-w-full bg-gray-800 text-white rounded-lg shadow-md">
         <thead>
-          <tr>
+          <tr className="bg-gray-900 text-left">
             <th className="px-4 py-2">ID</th>
             <th className="px-4 py-2">Nama Kategori</th>
             <th className="px-4 py-2">Aksi</th>
@@ -103,7 +103,7 @@ function AdminSepatu() {
         </thead>
         <tbody>
           {categories.map(category => (
-            <tr key={category.category_id} className="text-center border-b border-gray-700">
+            <tr key={category.category_id} className="text-center border-b border-gray-700 hover:bg-gray-700">
               <td className="px-4 py-2">{category.category_id}</td>
               <td className="px-4 py-2">
                 {editCategory && editCategory.category_id === category.category_id ? (
@@ -111,7 +111,7 @@ function AdminSepatu() {
                     type="text"
                     value={editCategory.category_name}
                     onChange={(e) => setEditCategory({ ...editCategory, category_name: e.target.value })}
-                    className="p-1 bg-gray-600 rounded-md text-white"
+                    className="p-1 bg-gray-600 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
                 ) : (
                   category.category_name

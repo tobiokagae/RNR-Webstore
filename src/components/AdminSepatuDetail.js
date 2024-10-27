@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Swal from 'sweetalert2';
-import { useNavigate } from 'react-router-dom'; // Ganti useHistory dengan useNavigate
+import { useNavigate } from 'react-router-dom';
 
 function AdminSepatuDetail() {
-  const navigate = useNavigate(); // Inisialisasi navigate
+  const navigate = useNavigate();
   const [shoes, setShoes] = useState([]);
   const [newShoe, setNewShoe] = useState({
     category_id: '',
@@ -90,7 +90,7 @@ function AdminSepatuDetail() {
   };
 
   const handleBack = () => {
-    navigate('/admin'); // Ganti history.push dengan navigate
+    navigate('/admin');
   };
 
   return (
