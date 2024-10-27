@@ -76,21 +76,6 @@ class Wishlist(db.Model):
     id_user = db.Column(db.Integer, db.ForeignKey('user.user_id'), nullable=False)
     date_added = db.Column(db.DateTime, default=get_current_time_wita)
 
-class Wallet(db.Model):
-    id_wallet = db.Column(db.Integer, primary_key=True)
-    id_user = db.Column(db.Integer, db.ForeignKey('user.user_id'), nullable=False)
-    balance = db.Column(db.Numeric(10, 2), nullable=False, default=0.0)
-    currency = db.Column(db.String(10), nullable=False, default='USD')
-    last_updated = db.Column(db.DateTime, default=get_current_time_wita, onupdate=get_current_time_wita)
-
-class Discount(db.Model):
-    id_discount = db.Column(db.Integer, primary_key=True)
-    shoe_detail_id = db.Column(db.Integer, db.ForeignKey('shoe_detail.shoe_detail_id'), nullable=False)
-    discount_code = db.Column(db.String(50), unique=True, nullable=False)
-    discount_value = db.Column(db.Numeric(5, 2), nullable=False)
-    date_added = db.Column(db.DateTime, default=get_current_time_wita)
-    expiration_date = db.Column(db.Date, nullable=False)
-
 # Enum untuk jenis interaksi
 class InteractionType(enum.Enum):
     view = "view"
