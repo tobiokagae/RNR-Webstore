@@ -22,7 +22,7 @@ db.init_app(app)
 migrate = Migrate(app, db)
 
 # Mengaktifkan CORS untuk seluruh aplikasi Flask
-CORS(app)
+CORS(app, resources={r"/api/*": {"origins": "http://localhost:3000"}})
 
 # Register blueprint untuk berbagai route
 app.register_blueprint(users_bp)

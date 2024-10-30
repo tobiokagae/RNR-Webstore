@@ -3,12 +3,12 @@
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background-color: #f5f5f5;
+    background-color:  #111827;
   }
   
   .shoe-detail-content {
     display: flex;
-    background-color: white;
+    background-color: #ffffff10;
     border-radius: 10px;
     padding: 40px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);

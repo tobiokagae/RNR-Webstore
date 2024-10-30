@@ -7,20 +7,22 @@ import SignIn from "./components/SignIn";
 import SignUp from "./components/SignUp";
 import ShoeDetail from "./components/ShoeDetail";
 import Cart from "./components/Cart";
-import Admin from './components/Admin';
+import Admin from "./components/Admin";
 import Payment from "./components/Payment";
-import SignUpAdmin from './components/SignUpAdmin';
+import SignUpAdmin from "./components/SignUpAdmin";
+import Product from "./components/Product";
 
-import AdminSepatu from './components/AdminSepatu';
-import AdminUser from './components/AdminUser';
-import AdminPayments from './components/AdminPayments';
-import AdminGallery from './components/AdminGallery';
-import AdminCarts from './components/AdminCarts';
-import AdminWishlists from './components/AdminWishlists';
-import AdminInteractions from './components/AdminInteractions';
-import AdminSepatuDetail from './components/AdminSepatuDetail';
+import AdminSepatu from "./components/AdminSepatu";
+import AdminUser from "./components/AdminUser";
+import AdminPayments from "./components/AdminPayments";
+import AdminGallery from "./components/AdminGallery";
+import AdminCarts from "./components/AdminCarts";
+import AdminWishlists from "./components/AdminWishlists";
+import AdminOrders from "./components/AdminOrders";
+import AdminInteractions from "./components/AdminInteractions";
+import AdminSepatuDetail from "./components/AdminSepatuDetail";
 
-import SignInAdmin from './components/SignInAdmin';
+import SignInAdmin from "./components/SignInAdmin";
 
 function App() {
   const [user, setUser] = useState(null);
@@ -41,22 +43,30 @@ function App() {
       <div className="App">
         <header className="navbar">
           <div className="logo">R&R</div>
-          {/* Display menu only if role is not Admin */}
-          {role !== 'Admin' && (
-            <nav className="menu">
-              <Link to="/" className="menu-item">Home</Link>
-              <Link to="/categories" className="menu-item">Categories</Link>
-              <Link to="/sale" className="menu-item">Sale</Link>
-              <Link to="/cart" className="menu-item">
-                <img src="/images/cart.png" alt="Cart" className="cart-logo"/>
-              </Link>
-            </nav>
-          )}
+          <nav className="menu">
+            <Link to={user ? "/" : "/signin"} className="menu-item">
+              Home
+            </Link>
+            <Link to={user ? "/categories" : "/signin"} className="menu-item">
+              Categories
+            </Link>
+            <Link to={user ? "/sale" : "/signin"} className="menu-item">
+              Sale
+            </Link>
+            <Link to={user ? "/products" : "/signin"} className="menu-item">
+              Products
+            </Link>
+            <Link to={user ? "/cart" : "/signin"} className="menu-item">
+              <img src="/images/cart.png" alt="Cart" className="cart-logo" />
+            </Link>
+          </nav>
           <div className="auth-buttons">
             {user ? (
               <div>
                 <span>Welcome, {user}</span>
-                <button onClick={handleLogout} className="logout-button">Logout</button>
+                <button onClick={handleLogout} className="logout-button">
+                  Logout
+                </button>
               </div>
             ) : (
               <>
@@ -100,6 +110,7 @@ function App() {
           <Route path="/signin" element={<SignIn onLogin={handleLogin} />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/admin" element={<Admin />} />
+          <Route path="/products" element={<Product />} />
           <Route path="/signup-admin" element={<SignUpAdmin />} />
           <Route path="/admin/categories" element={<AdminSepatu />} />
           <Route path="/admin/shoes" element={<AdminSepatuDetail />} />
@@ -108,11 +119,15 @@ function App() {
           <Route path="/admin/gallery" element={<AdminGallery />} />
           <Route path="/admin/carts" element={<AdminCarts />} />
           <Route path="/admin/wishlists" element={<AdminWishlists />} />
+          <Route path="/admin/orders" element={<AdminOrders />} />
           <Route path="/admin/interactions" element={<AdminInteractions />} />
           <Route path="/shoes/:id" element={<ShoeDetail />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/payment/:id" element={<Payment />} />
-          <Route path="/signin-admin" element={<SignInAdmin onLogin={handleLogin} />} />
+          <Route
+            path="/signin-admin"
+            element={<SignInAdmin onLogin={handleLogin} />}
+          />
         </Routes>
       </div>
     </Router>
