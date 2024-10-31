@@ -5,8 +5,8 @@ import Swal from 'sweetalert2';
 function AdminCarts() {
   const [carts, setCarts] = useState([]);
   const [newCart, setNewCart] = useState({
-    user_id: '',
-    shoe_id: '',
+    id_user: '',
+    shoe_detail_id: '',
     quantity: ''
   });
   const [editCart, setEditCart] = useState(null);
@@ -16,7 +16,7 @@ function AdminCarts() {
   }, []);
 
   const fetchCarts = () => {
-    axios.get('http://localhost:5000/api/carts')
+    axios.get('http://localhost:5000/api/cart')
       .then(response => {
         setCarts(response.data);
       })
@@ -26,10 +26,10 @@ function AdminCarts() {
   };
 
   const handleCreateCart = () => {
-    axios.post('http://localhost:5000/api/carts', newCart)
+    axios.post('http://localhost:5000/api/cart', newCart)
       .then(() => {
         fetchCarts();
-        setNewCart({ user_id: '', shoe_id: '', quantity: '' });
+        setNewCart({ id_user: '', shoe_detail_id: '', quantity: '' });
         Swal.fire('Success!', 'Cart created successfully!', 'success');
       })
       .catch(error => {
@@ -43,7 +43,7 @@ function AdminCarts() {
   };
 
   const handleUpdateCart = () => {
-    axios.put(`http://localhost:5000/api/carts/${editCart.cart_id}`, editCart)
+    axios.put(`http://localhost:5000/api/cart/${editCart.id_cart}`, editCart)
       .then(() => {
         fetchCarts();
         setEditCart(null);
@@ -66,7 +66,7 @@ function AdminCarts() {
       confirmButtonText: 'Yes, delete it!'
     }).then((result) => {
       if (result.isConfirmed) {
-        axios.delete(`http://localhost:5000/api/carts/${cartId}`)
+        axios.delete(`http://localhost:5000/api/cart/${cartId}`)
           .then(() => {
             fetchCarts();
             Swal.fire('Deleted!', 'Cart has been deleted.', 'success');
@@ -86,15 +86,15 @@ function AdminCarts() {
         <input
           type="text"
           placeholder="User ID"
-          value={newCart.user_id}
-          onChange={(e) => setNewCart({ ...newCart, user_id: e.target.value })}
+          value={newCart.id_user}
+          onChange={(e) => setNewCart({ ...newCart, id_user: e.target.value })}
           className="p-2 border rounded-md bg-gray-700 text-white placeholder-gray-400"
         />
         <input
           type="text"
           placeholder="Shoe ID"
-          value={newCart.shoe_id}
-          onChange={(e) => setNewCart({ ...newCart, shoe_id: e.target.value })}
+          value={newCart.shoe_detail_id}
+          onChange={(e) => setNewCart({ ...newCart, shoe_detail_id: e.target.value })}
           className="p-2 border rounded-md bg-gray-700 text-white placeholder-gray-400"
         />
         <input
@@ -123,34 +123,34 @@ function AdminCarts() {
         </thead>
         <tbody>
           {carts.map(cart => (
-            <tr key={cart.cart_id} className="text-center border-b border-gray-700 hover:bg-gray-700">
-              <td className="px-4 py-2">{cart.cart_id}</td>
+            <tr key={cart.id_cart} className="text-center border-b border-gray-700 hover:bg-gray-700">
+              <td className="px-4 py-2">{cart.id_cart}</td>
               <td className="px-4 py-2">
-                {editCart && editCart.cart_id === cart.cart_id ? (
+                {editCart && editCart.id_cart === cart.id_cart ? (
                   <input
                     type="text"
-                    value={editCart.user_id}
-                    onChange={(e) => setEditCart({ ...editCart, user_id: e.target.value })}
+                    value={editCart.id_user}
+                    onChange={(e) => setEditCart({ ...editCart, id_user: e.target.value })}
                     className="p-1 bg-gray-600 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
                 ) : (
-                  cart.user_id
+                  cart.id_user
                 )}
               </td>
               <td className="px-4 py-2">
-                {editCart && editCart.cart_id === cart.cart_id ? (
+                {editCart && editCart.id_cart === cart.id_cart ? (
                   <input
                     type="text"
-                    value={editCart.shoe_id}
-                    onChange={(e) => setEditCart({ ...editCart, shoe_id: e.target.value })}
+                    value={editCart.shoe_detail_id}
+                    onChange={(e) => setEditCart({ ...editCart, shoe_detail_id: e.target.value })}
                     className="p-1 bg-gray-600 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
                 ) : (
-                  cart.shoe_id
+                  cart.shoe_detail_id
                 )}
               </td>
               <td className="px-4 py-2">
-                {editCart && editCart.cart_id === cart.cart_id ? (
+                {editCart && editCart.id_cart === cart.id_cart ? (
                   <input
                     type="number"
                     value={editCart.quantity}
@@ -162,7 +162,7 @@ function AdminCarts() {
                 )}
               </td>
               <td className="px-4 py-2 flex justify-center space-x-2">
-                {editCart && editCart.cart_id === cart.cart_id ? (
+                {editCart && editCart.id_cart === cart.id_cart ? (
                   <button 
                     onClick={handleUpdateCart}
                     className="bg-green-500 text-white px-3 py-1 rounded-md hover:bg-green-600 transition duration-300"
@@ -178,7 +178,7 @@ function AdminCarts() {
                   </button>
                 )}
                 <button 
-                  onClick={() => handleDeleteCart(cart.cart_id)}
+                  onClick={() => handleDeleteCart(cart.id_cart)}
                   className="bg-red-500 text-white px-3 py-1 rounded-md hover:bg-red-600 transition duration-300"
                 >
                   Delete

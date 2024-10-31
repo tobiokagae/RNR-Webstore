@@ -1,44 +1,41 @@
+# wishlist.py
 from flask import Blueprint, request, jsonify
-from models import db, Wishlist, User, ShoeDetail  # Pastikan User dan ShoeDetail diimpor
+from models import db, Wishlist, User, ShoeDetail
 from datetime import datetime
 import pytz
 
 wishlist_bp = Blueprint('wishlist', __name__)
 
 def get_current_time_wita():
-    # Mengambil waktu saat ini di zona waktu WITA
-    wita_tz = pytz.timezone('Asia/Makassar') 
+    wita_tz = pytz.timezone('Asia/Makassar')
     return datetime.now(wita_tz)
 
 @wishlist_bp.route('/api/wishlist/<int:user_id>', methods=['GET'])
 def get_wishlist(user_id):
     wishlist_items = Wishlist.query.filter_by(id_user=user_id).all()
     if wishlist_items:
-        result = []
-        for item in wishlist_items:
-            result.append({
-                'id_wishlist': item.id_wishlist,
-                'id_shoe': item.id_shoe,
-                'id_user': item.id_user,
-                'date_added': item.date_added
-            })
+        result = [{
+            'id_wishlist': item.id_wishlist,
+            'shoe_detail_id': item.shoe_detail_id,  # perbaikan pada nama kolom
+            'id_user': item.id_user,
+            'date_added': item.date_added
+        } for item in wishlist_items]
         return jsonify(result), 200
     return jsonify({'message': 'Wishlist is empty'}), 404
 
 @wishlist_bp.route('/api/wishlist', methods=['POST'])
 def add_to_wishlist():
     data = request.json
-    
     user = User.query.get(data['id_user'])
     if not user:
         return jsonify({'message': 'User not found'}), 404
-    
-    shoe = ShoeDetail.query.get(data['id_shoe'])
+
+    shoe = ShoeDetail.query.get(data['shoe_detail_id'])  # pastikan kolom sesuai dengan data model
     if not shoe:
         return jsonify({'message': 'Shoe not found'}), 404
-    
+
     new_item = Wishlist(
-        id_shoe=data['id_shoe'],
+        shoe_detail_id=data['shoe_detail_id'],
         id_user=data['id_user'],
         date_added=get_current_time_wita()
     )
@@ -60,7 +57,7 @@ def update_wishlist(id_wishlist):
     data = request.json
     item = Wishlist.query.get(id_wishlist)
     if item:
-        item.id_shoe = data.get('id_shoe', item.id_shoe)
+        item.shoe_detail_id = data.get('shoe_detail_id', item.shoe_detail_id)
         item.id_user = data.get('id_user', item.id_user)
         item.date_added = get_current_time_wita()
         db.session.commit()
@@ -73,7 +70,7 @@ def get_wishlist_item(id_wishlist):
     if item:
         return jsonify({
             'id_wishlist': item.id_wishlist,
-            'id_shoe': item.id_shoe,
+            'shoe_detail_id': item.shoe_detail_id,
             'id_user': item.id_user,
             'date_added': item.date_added
         }), 200
@@ -82,12 +79,10 @@ def get_wishlist_item(id_wishlist):
 @wishlist_bp.route('/api/wishlist', methods=['GET'])
 def get_all_wishlist_items():
     wishlist_items = Wishlist.query.all()
-    result = []
-    for item in wishlist_items:
-        result.append({
-            'id_wishlist': item.id_wishlist,
-            'id_shoe': item.id_shoe,
-            'id_user': item.id_user,
-            'date_added': item.date_added.isoformat()
-        })
+    result = [{
+        'id_wishlist': item.id_wishlist,
+        'shoe_detail_id': item.shoe_detail_id,
+        'id_user': item.id_user,
+        'date_added': item.date_added.isoformat()
+    } for item in wishlist_items]
     return jsonify(result), 200

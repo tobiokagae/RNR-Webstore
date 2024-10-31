@@ -6,8 +6,10 @@ function AdminOrders() {
   const [orders, setOrders] = useState([]);
   const [newOrder, setNewOrder] = useState({
     user_id: '',
+    shoe_detail_id: '',
     order_status: '',
-    order_date: ''
+    order_date: '',
+    amount: '' // Tambahkan field amount di sini
   });
   const [editOrder, setEditOrder] = useState(null);
 
@@ -29,7 +31,7 @@ function AdminOrders() {
     axios.post('http://localhost:5000/api/orders', newOrder)
       .then(() => {
         fetchOrders();
-        setNewOrder({ user_id: '', order_status: '', order_date: '' });
+        setNewOrder({ user_id: '', shoe_detail_id: '', order_status: '', order_date: '', amount: '' });
         Swal.fire('Success!', 'Order created successfully!', 'success');
       })
       .catch(error => {
@@ -37,7 +39,6 @@ function AdminOrders() {
         Swal.fire('Error!', 'Failed to create order.', 'error');
       });
   };
-
   const handleEditOrder = (order) => {
     setEditOrder(order);
   };
@@ -92,6 +93,13 @@ function AdminOrders() {
         />
         <input
           type="text"
+          placeholder="Shoe Detail ID"
+          value={newOrder.shoe_detail_id}
+          onChange={(e) => setNewOrder({ ...newOrder, shoe_detail_id: e.target.value })}
+          className="p-2 border rounded-md bg-gray-700 text-white placeholder-gray-400"
+        />
+        <input
+          type="text"
           placeholder="Status Pesanan"
           value={newOrder.order_status}
           onChange={(e) => setNewOrder({ ...newOrder, order_status: e.target.value })}
@@ -102,6 +110,13 @@ function AdminOrders() {
           placeholder="Tanggal Pesanan"
           value={newOrder.order_date}
           onChange={(e) => setNewOrder({ ...newOrder, order_date: e.target.value })}
+          className="p-2 border rounded-md bg-gray-700 text-white placeholder-gray-400"
+        />
+        <input
+          type="number" // Gunakan input type number untuk amount
+          placeholder="Amount" // Tambahkan input untuk amount
+          value={newOrder.amount}
+          onChange={(e) => setNewOrder({ ...newOrder, amount: parseFloat(e.target.value) })}
           className="p-2 border rounded-md bg-gray-700 text-white placeholder-gray-400"
         />
         <button 
@@ -116,6 +131,7 @@ function AdminOrders() {
           <tr className="bg-gray-900 text-left">
             <th className="px-4 py-2">Order ID</th>
             <th className="px-4 py-2">User ID</th>
+            <th className="px-4 py-2">Shoe Detail ID</th>  {/* Tambah kolom Shoe Detail ID */}
             <th className="px-4 py-2">Status</th>
             <th className="px-4 py-2">Date</th>
             <th className="px-4 py-2">Actions</th>
@@ -125,18 +141,8 @@ function AdminOrders() {
           {orders.map(order => (
             <tr key={order.order_id} className="text-center border-b border-gray-700 hover:bg-gray-700">
               <td className="px-4 py-2">{order.order_id}</td>
-              <td className="px-4 py-2">
-                {editOrder && editOrder.order_id === order.order_id ? (
-                  <input
-                    type="text"
-                    value={editOrder.user_id}
-                    onChange={(e) => setEditOrder({ ...editOrder, user_id: e.target.value })}
-                    className="p-1 bg-gray-600 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  />
-                ) : (
-                  order.user_id
-                )}
-              </td>
+              <td className="px-4 py-2">{order.user_id}</td>
+              <td className="px-4 py-2">{order.shoe_detail_id}</td> {/* Tampilkan Shoe Detail ID */}
               <td className="px-4 py-2">
                 {editOrder && editOrder.order_id === order.order_id ? (
                   <input

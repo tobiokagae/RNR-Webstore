@@ -1,3 +1,4 @@
+# cart_routes.py
 from flask import Blueprint, request, jsonify
 from models import db, Cart, User, ShoeDetail
 from datetime import datetime, timedelta
@@ -18,7 +19,7 @@ def get_cart(user_id):
         for item in cart_items:
             result.append({
                 'id_cart': item.id_cart,
-                'id_shoe': item.id_shoe,
+                'shoe_detail_id': item.shoe_detail_id,
                 'id_user': item.id_user,
                 'quantity': item.quantity,
                 'date_added': item.date_added,
@@ -35,17 +36,16 @@ def add_to_cart():
     if not user:
         return jsonify({'message': 'User not found'}), 404
 
-    shoe = ShoeDetail.query.get(data['id_shoe'])
+    shoe = ShoeDetail.query.get(data['shoe_detail_id'])
     if not shoe:
         return jsonify({'message': 'Shoe not found'}), 404
 
-    # Cek apakah item sudah ada di keranjang
-    existing_item = Cart.query.filter_by(id_user=data['id_user'], id_shoe=data['id_shoe']).first()
+    existing_item = Cart.query.filter_by(id_user=data['id_user'], shoe_detail_id=data['shoe_detail_id']).first()
     if existing_item:
         return jsonify({'message': 'Item already in cart'}), 400
 
     new_item = Cart(
-        id_shoe=data['id_shoe'],
+        shoe_detail_id=data['shoe_detail_id'],
         id_user=data['id_user'],
         quantity=data['quantity'],
         date_added=get_current_time_wita(),
@@ -74,11 +74,11 @@ def update_cart(id_cart):
         if not user:
             return jsonify({'message': 'User not found'}), 404
 
-        shoe = ShoeDetail.query.get(data.get('id_shoe', item.id_shoe))
+        shoe = ShoeDetail.query.get(data.get('shoe_detail_id', item.shoe_detail_id))
         if not shoe:
             return jsonify({'message': 'Shoe not found'}), 404
 
-        item.id_shoe = data.get('id_shoe', item.id_shoe)
+        item.shoe_detail_id = data.get('shoe_detail_id', item.shoe_detail_id)
         item.id_user = data.get('id_user', item.id_user)
         item.quantity = data.get('quantity', item.quantity)
         item.last_updated = get_current_time_wita()
@@ -94,7 +94,7 @@ def get_cart_item(id_cart):
     if item:
         return jsonify({
             'id_cart': item.id_cart,
-            'id_shoe': item.id_shoe,
+            'shoe_detail_id': item.shoe_detail_id,
             'id_user': item.id_user,
             'quantity': item.quantity,
             'date_added': item.date_added,
@@ -109,7 +109,7 @@ def get_all_cart_items():
     for item in cart_items:
         result.append({
             'id_cart': item.id_cart,
-            'id_shoe': item.id_shoe,
+            'shoe_detail_id': item.shoe_detail_id,
             'id_user': item.id_user,
             'quantity': item.quantity,
             'date_added': item.date_added,

@@ -5,8 +5,8 @@ import Swal from 'sweetalert2';
 function AdminWishlists() {
   const [wishlists, setWishlists] = useState([]);
   const [newWishlist, setNewWishlist] = useState({
-    user_id: '',
-    shoe_id: ''
+    id_user: '',
+    shoe_detail_id: ''
   });
   const [editWishlist, setEditWishlist] = useState(null);
 
@@ -15,7 +15,7 @@ function AdminWishlists() {
   }, []);
 
   const fetchWishlists = () => {
-    axios.get('http://localhost:5000/api/wishlists')
+    axios.get('http://localhost:5000/api/wishlist') // sesuaikan endpoint backend jika diperlukan
       .then(response => {
         setWishlists(response.data);
       })
@@ -25,10 +25,10 @@ function AdminWishlists() {
   };
 
   const handleCreateWishlist = () => {
-    axios.post('http://localhost:5000/api/wishlists', newWishlist)
+    axios.post('http://localhost:5000/api/wishlist', newWishlist)
       .then(() => {
         fetchWishlists();
-        setNewWishlist({ user_id: '', shoe_id: '' });
+        setNewWishlist({ id_user: '', shoe_detail_id: '' });
         Swal.fire('Success!', 'Wishlist created successfully!', 'success');
       })
       .catch(error => {
@@ -42,7 +42,7 @@ function AdminWishlists() {
   };
 
   const handleUpdateWishlist = () => {
-    axios.put(`http://localhost:5000/api/wishlists/${editWishlist.wishlist_id}`, editWishlist)
+    axios.put(`http://localhost:5000/api/wishlist/${editWishlist.id_wishlist}`, editWishlist)
       .then(() => {
         fetchWishlists();
         setEditWishlist(null);
@@ -65,7 +65,7 @@ function AdminWishlists() {
       confirmButtonText: 'Yes, delete it!'
     }).then((result) => {
       if (result.isConfirmed) {
-        axios.delete(`http://localhost:5000/api/wishlists/${wishlistId}`)
+        axios.delete(`http://localhost:5000/api/wishlist/${wishlistId}`)
           .then(() => {
             fetchWishlists();
             Swal.fire('Deleted!', 'Wishlist has been deleted.', 'success');
@@ -85,15 +85,15 @@ function AdminWishlists() {
         <input
           type="text"
           placeholder="User ID"
-          value={newWishlist.user_id}
-          onChange={(e) => setNewWishlist({ ...newWishlist, user_id: e.target.value })}
+          value={newWishlist.id_user}
+          onChange={(e) => setNewWishlist({ ...newWishlist, id_user: e.target.value })}
           className="p-2 border rounded-md bg-gray-700 text-white placeholder-gray-400"
         />
         <input
           type="text"
-          placeholder="Shoe ID"
-          value={newWishlist.shoe_id}
-          onChange={(e) => setNewWishlist({ ...newWishlist, shoe_id: e.target.value })}
+          placeholder="Shoe Detail ID"
+          value={newWishlist.shoe_detail_id}
+          onChange={(e) => setNewWishlist({ ...newWishlist, shoe_detail_id: e.target.value })}
           className="p-2 border rounded-md bg-gray-700 text-white placeholder-gray-400"
         />
         <button 
@@ -108,57 +108,57 @@ function AdminWishlists() {
           <tr className="bg-gray-900 text-left">
             <th className="px-4 py-2">Wishlist ID</th>
             <th className="px-4 py-2">User ID</th>
-            <th className="px-4 py-2">Shoe ID</th>
+            <th className="px-4 py-2">Shoe Detail ID</th>
             <th className="px-4 py-2">Actions</th>
           </tr>
         </thead>
         <tbody>
           {wishlists.map(wishlist => (
-            <tr key={wishlist.wishlist_id} className="text-center border-b border-gray-700 hover:bg-gray-700">
-              <td className="px-4 py-2">{wishlist.wishlist_id}</td>
+            <tr key={wishlist.id_wishlist} className="text-center border-b border-gray-700 hover:bg-gray-700">
+              <td className="px-4 py-2">{wishlist.id_wishlist}</td>
               <td className="px-4 py-2">
-                {editWishlist && editWishlist.wishlist_id === wishlist.wishlist_id ? (
+                {editWishlist && editWishlist.id_wishlist === wishlist.id_wishlist ? (
                   <input
                     type="text"
-                    value={editWishlist.user_id}
-                    onChange={(e) => setEditWishlist({ ...editWishlist, user_id: e.target.value })}
+                    value={editWishlist.id_user}
+                    onChange={(e) => setEditWishlist({ ...editWishlist, id_user: e.target.value })}
                     className="p-1 bg-gray-600 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
                 ) : (
-                  wishlist.user_id
+                  wishlist.id_user
                 )}
               </td>
               <td className="px-4 py-2">
-                {editWishlist && editWishlist.wishlist_id === wishlist.wishlist_id ? (
+                {editWishlist && editWishlist.id_wishlist === wishlist.id_wishlist ? (
                   <input
                     type="text"
-                    value={editWishlist.shoe_id}
-                    onChange={(e) => setEditWishlist({ ...editWishlist, shoe_id: e.target.value })}
+                    value={editWishlist.shoe_detail_id}
+                    onChange={(e) => setEditWishlist({ ...editWishlist, shoe_detail_id: e.target.value })}
                     className="p-1 bg-gray-600 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
                 ) : (
-                  wishlist.shoe_id
+                  wishlist.shoe_detail_id
                 )}
               </td>
-              <td className="px-4 py-2 flex justify-center space-x-2">
-                {editWishlist && editWishlist.wishlist_id === wishlist.wishlist_id ? (
-                  <button 
+              <td className="px-4 py-2 flex justify-center">
+                {editWishlist && editWishlist.id_wishlist === wishlist.id_wishlist ? (
+                  <button
                     onClick={handleUpdateWishlist}
-                    className="bg-green-500 text-white px-3 py-1 rounded-md hover:bg-green-600 transition duration-300"
+                    className="bg-green-500 text-white p-2 rounded-md hover:bg-green-600 transition duration-300 mx-1"
                   >
                     Save
                   </button>
                 ) : (
-                  <button 
+                  <button
                     onClick={() => handleEditWishlist(wishlist)}
-                    className="bg-yellow-500 text-white px-3 py-1 rounded-md hover:bg-yellow-600 transition duration-300"
+                    className="bg-yellow-500 text-white p-2 rounded-md hover:bg-yellow-600 transition duration-300 mx-1"
                   >
                     Edit
                   </button>
                 )}
-                <button 
-                  onClick={() => handleDeleteWishlist(wishlist.wishlist_id)}
-                  className="bg-red-500 text-white px-3 py-1 rounded-md hover:bg-red-600 transition duration-300"
+                <button
+                  onClick={() => handleDeleteWishlist(wishlist.id_wishlist)}
+                  className="bg-red-500 text-white p-2 rounded-md hover:bg-red-600 transition duration-300 mx-1"
                 >
                   Delete
                 </button>
