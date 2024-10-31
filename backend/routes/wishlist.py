@@ -1,6 +1,6 @@
 # wishlist.py
 from flask import Blueprint, request, jsonify
-from models import db, Wishlist, User, ShoeDetail
+from models import db, Wishlist, User, ShoeDetail, UserInteraction
 from datetime import datetime
 import pytz
 
@@ -39,7 +39,16 @@ def add_to_wishlist():
         id_user=data['id_user'],
         date_added=get_current_time_wita()
     )
+
+    new_interaction = UserInteraction(
+        id_user=data['id_user'],
+        shoe_detail_id=data['shoe_detail_id'],
+        interaction_type='wishlist',
+        interaction_date=get_current_time_wita()
+    )
+
     db.session.add(new_item)
+    db.session.add(new_interaction)
     db.session.commit()
     return jsonify({'message': 'Item added to wishlist successfully'}), 201
 

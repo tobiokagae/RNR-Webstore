@@ -25,18 +25,18 @@ function AdminCarts() {
       });
   };
 
-  const handleCreateCart = () => {
-    axios.post('http://localhost:5000/api/cart', newCart)
-      .then(() => {
-        fetchCarts();
-        setNewCart({ id_user: '', shoe_detail_id: '', quantity: '' });
-        Swal.fire('Success!', 'Cart created successfully!', 'success');
-      })
-      .catch(error => {
-        console.error('Error creating cart:', error);
-        Swal.fire('Error!', 'Failed to create cart.', 'error');
-      });
-  };
+const handleCreateCart = () => {
+  axios.post('http://localhost:5000/api/cart', newCart)
+    .then(() => {
+      fetchCarts();
+      setNewCart({ id_user: '', shoe_detail_id: '', quantity: '' });
+      Swal.fire('Success!', 'Cart created successfully!', 'success');
+    })
+    .catch(error => {
+      console.error('Error creating cart:', error);
+      Swal.fire('Error!', 'Failed to create cart.', 'error');
+    });
+};
 
   const handleEditCart = (cart) => {
     setEditCart(cart);

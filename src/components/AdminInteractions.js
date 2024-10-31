@@ -5,7 +5,7 @@ import Swal from 'sweetalert2';
 function AdminInteractions() {
   const [interactions, setInteractions] = useState([]);
   const [newInteraction, setNewInteraction] = useState({
-    user_id: '',
+    id_user: '',
     shoe_detail_id: '',
     interaction_type: ''
   });
@@ -16,7 +16,7 @@ function AdminInteractions() {
   }, []);
 
   const fetchInteractions = () => {
-    axios.get('http://localhost:5000/api/interactions')
+    axios.get('http://localhost:5000/api/user_interactions') // Use the correct endpoint
       .then(response => {
         setInteractions(response.data);
       })
@@ -26,10 +26,16 @@ function AdminInteractions() {
   };
 
   const handleCreateInteraction = () => {
-    axios.post('http://localhost:5000/api/interactions', newInteraction)
+    // Validate before creating interaction
+    if (!newInteraction.id_user || !newInteraction.shoe_detail_id || !newInteraction.interaction_type) {
+      Swal.fire('Error!', 'All fields are required.', 'error');
+      return;
+    }
+
+    axios.post('http://localhost:5000/api/user_interactions', newInteraction) // Use the correct endpoint
       .then(() => {
         fetchInteractions();
-        setNewInteraction({ user_id: '', shoe_detail_id: '', interaction_type: '' });
+        setNewInteraction({ id_user: '', shoe_detail_id: '', interaction_type: '' });
         Swal.fire('Success!', 'Interaction created successfully!', 'success');
       })
       .catch(error => {
@@ -43,7 +49,13 @@ function AdminInteractions() {
   };
 
   const handleUpdateInteraction = () => {
-    axios.put(`http://localhost:5000/api/interactions/${editInteraction.interaction_id}`, editInteraction)
+    // Validate before updating interaction
+    if (!editInteraction.id_user || !editInteraction.shoe_detail_id || !editInteraction.interaction_type) {
+      Swal.fire('Error!', 'All fields are required.', 'error');
+      return;
+    }
+
+    axios.put(`http://localhost:5000/api/user_interactions/${editInteraction.interaction_id}`, editInteraction) // Use the correct endpoint
       .then(() => {
         fetchInteractions();
         setEditInteraction(null);
@@ -66,7 +78,7 @@ function AdminInteractions() {
       confirmButtonText: 'Yes, delete it!'
     }).then((result) => {
       if (result.isConfirmed) {
-        axios.delete(`http://localhost:5000/api/interactions/${interactionId}`)
+        axios.delete(`http://localhost:5000/api/user_interactions/${interactionId}`) // Use the correct endpoint
           .then(() => {
             fetchInteractions();
             Swal.fire('Deleted!', 'Interaction has been deleted.', 'success');
@@ -86,8 +98,8 @@ function AdminInteractions() {
         <input
           type="text"
           placeholder="User ID"
-          value={newInteraction.user_id}
-          onChange={(e) => setNewInteraction({ ...newInteraction, user_id: e.target.value })}
+          value={newInteraction.id_user}
+          onChange={(e) => setNewInteraction({ ...newInteraction, id_user: e.target.value })}
           className="p-2 border rounded-md bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
         <input
@@ -129,12 +141,12 @@ function AdminInteractions() {
                 {editInteraction && editInteraction.interaction_id === interaction.interaction_id ? (
                   <input
                     type="text"
-                    value={editInteraction.user_id}
-                    onChange={(e) => setEditInteraction({ ...editInteraction, user_id: e.target.value })}
+                    value={editInteraction.id_user}
+                    onChange={(e) => setEditInteraction({ ...editInteraction, id_user: e.target.value })}
                     className="p-1 bg-gray-600 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
                 ) : (
-                  interaction.user_id
+                  interaction.id_user
                 )}
               </td>
               <td className="px-4 py-2">

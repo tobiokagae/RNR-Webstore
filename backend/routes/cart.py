@@ -1,6 +1,6 @@
 # cart_routes.py
 from flask import Blueprint, request, jsonify
-from models import db, Cart, User, ShoeDetail
+from models import db, Cart, User, ShoeDetail, UserInteraction
 from datetime import datetime, timedelta
 import pytz
 
@@ -51,7 +51,16 @@ def add_to_cart():
         date_added=get_current_time_wita(),
         last_updated=get_current_time_wita()
     )
+
+    new_interaction = UserInteraction(
+        id_user=data['id_user'],
+        shoe_detail_id=data['shoe_detail_id'],
+        interaction_type='cart',
+        interaction_date=get_current_time_wita()
+    )
+
     db.session.add(new_item)
+    db.session.add(new_interaction)
     db.session.commit()
     return jsonify({'message': 'Item added to cart successfully'}), 201
 

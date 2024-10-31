@@ -8,9 +8,9 @@ from routes.orders import orders_bp
 from routes.payments import payments_bp
 from routes.shoes import shoes_bp
 from routes.categories import categories_bp
-from routes.gallery import gallery_bp
 from routes.cart import cart_bp
 from routes.wishlist import wishlist_bp
+from routes.userInteraction import user_interaction_bp
 
 app = Flask(__name__)
 app.config.from_object(Config)
@@ -30,9 +30,9 @@ app.register_blueprint(orders_bp)
 app.register_blueprint(payments_bp)
 app.register_blueprint(shoes_bp)
 app.register_blueprint(categories_bp)
-app.register_blueprint(gallery_bp)
 app.register_blueprint(cart_bp)
 app.register_blueprint(wishlist_bp)
+app.register_blueprint(user_interaction_bp, url_prefix='/api')
 
 # Menambahkan error handler global
 @app.errorhandler(404)

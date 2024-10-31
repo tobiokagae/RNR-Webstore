@@ -35,7 +35,7 @@ function AdminWishlists() {
         console.error('Error creating wishlist:', error);
         Swal.fire('Error!', 'Failed to create wishlist.', 'error');
       });
-  };
+};
 
   const handleEditWishlist = (wishlist) => {
     setEditWishlist(wishlist);

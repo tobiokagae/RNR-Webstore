@@ -55,13 +55,6 @@ class ShoeCategory(db.Model):
     date_added = db.Column(db.DateTime, default=get_current_time_wita)
     last_updated = db.Column(db.DateTime, default=get_current_time_wita, onupdate=get_current_time_wita)
 
-class Gallery(db.Model):
-    gallery_id = db.Column(db.Integer, primary_key=True)
-    shoe_detail_id = db.Column(db.Integer, db.ForeignKey('shoe_detail.shoe_detail_id'), nullable=False)
-    image_url = db.Column(db.String(255), nullable=False)
-    date_added = db.Column(db.DateTime, default=get_current_time_wita)
-    last_updated = db.Column(db.DateTime, default=get_current_time_wita, onupdate=get_current_time_wita)
-
 class Cart(db.Model):
     id_cart = db.Column(db.Integer, primary_key=True)
     shoe_detail_id = db.Column(db.Integer, db.ForeignKey('shoe_detail.shoe_detail_id'), nullable=False)
