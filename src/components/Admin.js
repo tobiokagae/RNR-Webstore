@@ -15,7 +15,6 @@ function Admin() {
           <li><a href="/admin/users" className="text-white hover:text-yellow-500">Manage Users</a></li>
           <li><a href="/admin/orders" className="text-white hover:text-yellow-500">Manage Orders</a></li>
           <li><a href="/admin/payments" className="text-white hover:text-yellow-500">Manage Payments</a></li>
-          <li><a href="/admin/gallery" className="text-white hover:text-yellow-500">Manage Gallery</a></li>
           <li><a href="/admin/carts" className="text-white hover:text-yellow-500">Manage Carts</a></li>
           <li><a href="/admin/wishlists" className="text-white hover:text-yellow-500">Manage Wishlists</a></li>
           <li><a href="/admin/interactions" className="text-white hover:text-yellow-500">Manage User Interactions</a></li>

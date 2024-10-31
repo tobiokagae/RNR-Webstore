@@ -116,7 +116,6 @@ function App() {
           <Route path="/admin/shoes" element={<AdminSepatuDetail />} />
           <Route path="/admin/users" element={<AdminUser />} />
           <Route path="/admin/payments" element={<AdminPayments />} />
-          <Route path="/admin/gallery" element={<AdminGallery />} />
           <Route path="/admin/carts" element={<AdminCarts />} />
           <Route path="/admin/wishlists" element={<AdminWishlists />} />
           <Route path="/admin/orders" element={<AdminOrders />} />
