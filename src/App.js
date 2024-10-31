@@ -15,7 +15,6 @@ import Product from "./components/Product";
 import AdminSepatu from "./components/AdminSepatu";
 import AdminUser from "./components/AdminUser";
 import AdminPayments from "./components/AdminPayments";
-import AdminGallery from "./components/AdminGallery";
 import AdminCarts from "./components/AdminCarts";
 import AdminWishlists from "./components/AdminWishlists";
 import AdminOrders from "./components/AdminOrders";
