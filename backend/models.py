@@ -82,3 +82,8 @@ class UserInteraction(db.Model):
     shoe_detail_id = db.Column(db.Integer, db.ForeignKey('shoe_detail.shoe_detail_id'), nullable=False)
     interaction_type = db.Column(db.Enum(InteractionType), nullable=False)  # Menggunakan Enum untuk jenis interaksi
     interaction_date = db.Column(db.DateTime, default=get_current_time_wita)
+
+class ShoeRecomendationForUsers(db.Model):
+    id_shoe_recomendation = db.Column(db.Integer, primary_key=True)
+    id_user = db.Column(db.Integer, db.ForeignKey('user.user_id'), nullable=False)
+    shoe_detail_id = db.Column(db.Integer, db.ForeignKey('shoe_detail.shoe_detail_id'), nullable=False)

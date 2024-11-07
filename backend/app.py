@@ -11,6 +11,7 @@ from routes.categories import categories_bp
 from routes.cart import cart_bp
 from routes.wishlist import wishlist_bp
 from routes.userInteraction import user_interaction_bp
+from routes.shoeRecomendation import shoe_recommendation_bp
 
 app = Flask(__name__)
 app.config.from_object(Config)
@@ -33,6 +34,7 @@ app.register_blueprint(categories_bp)
 app.register_blueprint(cart_bp)
 app.register_blueprint(wishlist_bp)
 app.register_blueprint(user_interaction_bp, url_prefix='/api')
+app.register_blueprint(shoe_recommendation_bp)
 
 # Menambahkan error handler global
 @app.errorhandler(404)
