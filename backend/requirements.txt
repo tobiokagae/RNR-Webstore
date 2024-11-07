@@ -5,6 +5,7 @@ Flask-Cors
 pymysql
 pytz
 pandas
+joblib
 numpy
 scikit-learn
 matplotlib

@@ -2,6 +2,7 @@ from flask import Blueprint, request, jsonify
 from models import db, UserInteraction, InteractionType
 from datetime import datetime
 import pytz
+# from data_training import train_model
 
 user_interaction_bp = Blueprint('user_interaction', __name__)
 
@@ -33,7 +34,13 @@ def create_interaction():
     )
     db.session.add(new_interaction)
     db.session.commit()
-    return jsonify({'message': 'Interaction recorded successfully'}), 201
+
+    # # Jalankan pelatihan model setelah data berhasil disimpan
+    # try:
+    #     train_model()  # Fungsi ini menjalankan skrip pelatihan model
+    #     return jsonify({'message': 'Interaction recorded and model trained successfully'}), 201
+    # except Exception as e:
+    #     return jsonify({'message': f'Interaction recorded but error during model training: {str(e)}'}), 500
 
 @user_interaction_bp.route('/user_interactions/<int:interaction_id>', methods=['PUT'])
 def update_interaction(interaction_id):
