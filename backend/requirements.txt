@@ -1,7 +1,12 @@
 Flask
 Flask-SQLAlchemy
 Flask-Migrate
-Flask-Cors 
+Flask-Cors
 pymysql
 pytz
-axios
+pandas
+numpy
+scikit-learn
+matplotlib
+seaborn
+SQLAlchemy
