@@ -1,5 +1,6 @@
-import sqlite3
+from werkzeug.security import generate_password_hash
 from datetime import datetime
+import sqlite3
 
 # Ganti dengan path file database SQLite Anda
 db_path = 'D:\\Kuliah\\V\\RNR-Webstore\\backend\\instance\\site.db'
@@ -14,7 +15,7 @@ cursor.execute("DELETE FROM user")
 # Menambahkan 1 admin dan 1 user
 # Data untuk admin
 admin_username = 'admin'
-admin_password = 'adminpassword'
+admin_password = generate_password_hash('adminpassword', method='pbkdf2:sha256')
 admin_email = 'admin@example.com'
 admin_address = 'Admin Address'
 admin_phone = '0812345678'
@@ -24,14 +25,14 @@ admin_role = 'Admin'
 date_added = last_updated = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
 # Menyisipkan admin
-cursor.execute('''
+cursor.execute(''' 
     INSERT INTO user (username, password, email, address, phone, first_name, last_name, role, date_added, last_updated)
     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 ''', (admin_username, admin_password, admin_email, admin_address, admin_phone, admin_first_name, admin_last_name, admin_role, date_added, last_updated))
 
 # Data untuk user
 user_username = 'user1'
-user_password = 'userpassword1'
+user_password = generate_password_hash('userpassword1', method='pbkdf2:sha256')
 user_email = 'user1@example.com'
 user_address = 'User Address'
 user_phone = '0812345679'
