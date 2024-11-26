@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import "./App.css";
 import Categories from "./components/Categories";
-import Sale from "./components/Sale";
+import Recomended from "./components/Recomended"; // Update this import from Sale to Recomended
 import SignIn from "./components/SignIn";
 import SignUp from "./components/SignUp";
 import ShoeDetail from "./components/ShoeDetail";
@@ -49,8 +49,8 @@ function App() {
             <Link to={user ? "/categories" : "/signin"} className="menu-item">
               Categories
             </Link>
-            <Link to={user ? "/sale" : "/signin"} className="menu-item">
-              Sale
+            <Link to={user ? "/recomended" : "/signin"} className="menu-item">
+              Recomended {/* Updated this link */}
             </Link>
             <Link to={user ? "/products" : "/signin"} className="menu-item">
               Products
@@ -105,7 +105,8 @@ function App() {
             }
           />
           <Route path="/categories" element={<Categories />} />
-          <Route path="/sale" element={<Sale />} />
+          <Route path="/recomended" element={<Recomended />} />{" "}
+          {/* Updated this route */}
           <Route path="/signin" element={<SignIn onLogin={handleLogin} />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/admin" element={<Admin />} />

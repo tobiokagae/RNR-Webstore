@@ -25,29 +25,29 @@ cursor = conn.cursor()
 # Kosongkan tabel user_interaction terlebih dahulu
 cursor.execute("DELETE FROM user_interaction")
 
-# # Menyiapkan data untuk dimasukkan ke dalam tabel UserInteraction
-# query = '''
-# WITH RECURSIVE generate_series AS (
-#     SELECT 1 AS n
-#     UNION ALL
-#     SELECT n + 1 FROM generate_series WHERE n <= 500  -- Perbanyak data interaksi (500 data)
-# )
-# INSERT INTO user_interaction (id_user, shoe_detail_id, interaction_type, interaction_date)
-# SELECT
-#     (n % 100) + 1 AS id_user,  -- Menggunakan user_id dari 1 sampai 100 (100 user)
-#     (n % 5) + 1 AS shoe_detail_id,  -- Menggunakan shoe_detail_id dari 1 sampai 5 (contoh)
-#     CASE
-#         WHEN n % 4 = 0 THEN 'view'
-#         WHEN n % 4 = 1 THEN 'wishlist'
-#         WHEN n % 4 = 2 THEN 'cart'
-#         ELSE 'order'
-#     END AS interaction_type,
-#     CURRENT_TIMESTAMP AS interaction_date
-# FROM generate_series;
-# '''
+# Menyiapkan data untuk dimasukkan ke dalam tabel UserInteraction
+query = '''
+WITH RECURSIVE generate_series AS (
+    SELECT 1 AS n
+    UNION ALL
+    SELECT n + 1 FROM generate_series WHERE n <= 500  -- Perbanyak data interaksi (500 data)
+)
+INSERT INTO user_interaction (id_user, shoe_detail_id, interaction_type, interaction_date)
+SELECT
+    (n % 100) + 1 AS id_user,  -- Menggunakan user_id dari 1 sampai 100 (100 user)
+    (n % 5) + 1 AS shoe_detail_id,  -- Menggunakan shoe_detail_id dari 1 sampai 5 (contoh)
+    CASE
+        WHEN n % 4 = 0 THEN 'view'
+        WHEN n % 4 = 1 THEN 'wishlist'
+        WHEN n % 4 = 2 THEN 'cart'
+        ELSE 'order'
+    END AS interaction_type,
+    CURRENT_TIMESTAMP AS interaction_date
+FROM generate_series;
+'''
 
-# # Menjalankan query
-# cursor.execute(query)
+# Menjalankan query
+cursor.execute(query)
 
 # Commit perubahan dan menutup koneksi
 conn.commit()

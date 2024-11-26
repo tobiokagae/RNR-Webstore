@@ -1,9 +1,12 @@
-import React, { useState } from 'react';
-import axios from 'axios';
-import { useNavigate, Link } from 'react-router-dom';
+import React, { useState } from "react";
+import axios from "axios";
+import { useNavigate, Link } from "react-router-dom";
 
 function SignIn({ onLogin }) {
-  const [credentials, setCredentials] = useState({ username: '', password: '' });
+  const [credentials, setCredentials] = useState({
+    username: "",
+    password: "",
+  });
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -13,37 +16,61 @@ function SignIn({ onLogin }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:5000/api/users/login', credentials);
+      const response = await axios.post(
+        "http://localhost:5000/api/users/login",
+        credentials
+      );
       alert(response.data.message);
       if (response.status === 200) {
         onLogin(response.data.username);
-        if (response.data.role === 'Admin') {
-          navigate('/admin');
+
+        // Store user details and role in localStorage
+        localStorage.setItem("username", response.data.username);
+        localStorage.setItem("role", response.data.role);
+
+        // You can also store user ID if needed (assuming you have user_id in the response)
+        if (response.data.user_id) {
+          localStorage.setItem("user_id", response.data.user_id);
+        }
+
+        if (response.data.role === "Admin") {
+          navigate("/admin");
         } else {
-          navigate('/');
+          navigate("/");
         }
       }
     } catch (error) {
-      console.error('Error:', error);
-      alert(error.response?.data?.message || 'An error occurred. Please try again.');
+      console.error("Error:", error);
+      alert(
+        error.response?.data?.message || "An error occurred. Please try again."
+      );
     }
   };
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-radial from-gray-800 via-gray-700 to-black">
       <div className="bg-white p-10 rounded-lg shadow-lg w-full max-w-md">
-        <h1 className="text-3xl font-extrabold mb-2 text-center text-gray-800">Welcome Back!</h1>
-        <h2 className="text-xl font-semibold mb-6 text-center text-gray-600">Please sign in to continue</h2>
-        
+        <h1 className="text-3xl font-extrabold mb-2 text-center text-gray-800">
+          Welcome Back!
+        </h1>
+        <h2 className="text-xl font-semibold mb-6 text-center text-gray-600">
+          Please sign in to continue
+        </h2>
+
         <Link to="/signin-admin" className="block text-center mb-4">
           <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded shadow-md transition duration-300 transform hover:scale-105">
             Go to Admin
           </button>
         </Link>
 
-            <form className="space-y-5" onSubmit={handleSubmit}>
+        <form className="space-y-5" onSubmit={handleSubmit}>
           <div className="flex flex-col">
-            <label htmlFor="username" className="mb-1 font-semibold text-gray-700">Username</label>
+            <label
+              htmlFor="username"
+              className="mb-1 font-semibold text-gray-700"
+            >
+              Username
+            </label>
             <input
               type="text"
               id="username"
@@ -54,7 +81,12 @@ function SignIn({ onLogin }) {
             />
           </div>
           <div className="flex flex-col">
-            <label htmlFor="password" className="mb-1 font-semibold text-gray-700">Password</label>
+            <label
+              htmlFor="password"
+              className="mb-1 font-semibold text-gray-700"
+            >
+              Password
+            </label>
             <input
               type="password"
               id="password"
@@ -65,7 +97,12 @@ function SignIn({ onLogin }) {
             />
           </div>
           <div className="flex justify-between items-center mt-3">
-            <Link to="/forgot-password" className="text-sm text-blue-500 hover:underline">Need Help?</Link>
+            <Link
+              to="/forgot-password"
+              className="text-sm text-blue-500 hover:underline"
+            >
+              Need Help?
+            </Link>
             <button
               type="submit"
               className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-lg shadow-lg transition duration-300 transform hover:scale-105"
@@ -75,9 +112,11 @@ function SignIn({ onLogin }) {
           </div>
         </form>
 
-
         <p className="mt-8 text-center text-gray-700">
-          Don’t have an account? <Link to="/signup" className="text-blue-500 hover:underline">Register</Link>
+          Don’t have an account?{" "}
+          <Link to="/signup" className="text-blue-500 hover:underline">
+            Register
+          </Link>
         </p>
       </div>
     </div>

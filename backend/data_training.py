@@ -53,7 +53,9 @@ X_test_scaled = scaler.transform(X_test)
 
 # Melakukan cross-validation untuk memastikan model tidak overfit
 model = RandomForestClassifier(n_estimators=100, random_state=42, class_weight='balanced')
-cv_scores = cross_val_score(model, X, y, cv=5, scoring='accuracy')
+
+# Menggunakan 3-fold cross-validation jika data hanya 4 sampel
+cv_scores = cross_val_score(model, X, y, cv=3, scoring='accuracy')
 print(f"Accuracy per fold: {cv_scores}")
 print(f"Average Accuracy: {np.mean(cv_scores):.4f}")
 
@@ -65,9 +67,10 @@ param_grid = {
     'min_samples_leaf': [1, 2, 4]
 }
 
+# Gunakan 3-fold cross-validation di GridSearchCV
 grid_search = GridSearchCV(estimator=RandomForestClassifier(random_state=42),
                            param_grid=param_grid,
-                           cv=5,  # 5-fold cross-validation
+                           cv=3,  # 3-fold cross-validation
                            scoring='accuracy',
                            n_jobs=-1,
                            verbose=2)

@@ -59,9 +59,11 @@ def login():
         return jsonify({
             'message': 'Login successful',
             'username': user.username,
-            'role': user.role  # Pastikan role juga dikembalikan
+            'role': user.role,  # Pastikan role juga dikembalikan
+            'user_id': user.user_id  # Mengembalikan ID pengguna
         }), 200
     return jsonify({'message': 'Invalid credentials'}), 401
+
 
 # Update Profil Pengguna
 @users_bp.route('/api/users/profile/<int:user_id>', methods=['PUT'])

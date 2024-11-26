@@ -1,26 +1,32 @@
-import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import './ShoeDetail.css';
+import React, { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import axios from "axios";
+import "./ShoeDetail.css";
 
 function ShoeDetail() {
-  const { id } = useParams();
+  const { id } = useParams(); // Ambil ID dari URL parameter
   const navigate = useNavigate();
-  const [shoe, setShoe] = useState(null);
+  const [shoe, setShoe] = useState(null); // State untuk menyimpan data sepatu
+  const [error, setError] = useState(null); // State untuk menangani error
 
+  // Fetch data sepatu ketika komponen pertama kali dimuat
   useEffect(() => {
     const fetchShoe = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/api/shoes/${id}`);
+        const response = await axios.get(
+          `http://localhost:5000/api/shoes/${id}`
+        );
         setShoe(response.data);
       } catch (error) {
         console.error("Error fetching shoe details:", error);
+        setError("Error fetching data. Please try again later.");
       }
     };
 
     fetchShoe();
   }, [id]);
 
+  // Menentukan nama kategori sepatu berdasarkan ID
   const getCategoryName = (categoryId) => {
     switch (categoryId) {
       case 1:
@@ -38,48 +44,74 @@ function ShoeDetail() {
     }
   };
 
-  if (!shoe) {
-    return <h2>Loading...</h2>;
+  if (error) {
+    return <h2>{error}</h2>; // Tampilkan error jika terjadi kesalahan
   }
 
-  const addToCart = () => {
-    const cart = JSON.parse(localStorage.getItem('cart')) || [];
-    const existingProductIndex = cart.findIndex(item => item.id === shoe.id);
+  if (!shoe) {
+    return <h2>Loading...</h2>; // Tampilkan loading jika data masih kosong
+  }
 
-    if (existingProductIndex >= 0) {
-      cart[existingProductIndex].quantity += 1;
-    } else {
-      cart.push({
-        ...shoe,
-        quantity: 1,
-        date_added: new Date().toISOString(),
-      });
+  // Menambahkan sepatu ke keranjang dengan API
+  const addToCart = async () => {
+    try {
+      const userId = 1; // You need to get the actual user ID from your auth system
+      const data = {
+        id_user: userId,
+        shoe_detail_id: shoe.shoe_detail_id,
+        quantity: 1, // Default quantity
+      };
+
+      const response = await axios.post("http://localhost:5000/api/cart", data);
+
+      if (response.status === 201) {
+        alert(`${shoe.shoe_name} added to cart!`);
+      }
+    } catch (error) {
+      console.error("Error adding item to cart:", error);
+      alert(
+        "There was an issue adding the item to your cart. Please try again."
+      );
     }
-
-    localStorage.setItem('cart', JSON.stringify(cart));
-    alert(`${shoe.shoe_name} added to cart!`);
   };
 
+  // Fungsi untuk mengarahkan ke halaman pembayaran
   const handleBuyNow = () => {
-    navigate(`/payment/${shoe.id}`);
+    navigate(`/payment/${shoe.shoe_detail_id}`);
   };
 
+  // Menampilkan detail sepatu
   return (
     <div className="shoe-detail-container">
       <div className="shoe-detail-content">
         <div className="shoe-image-section">
-          <img src={`/images/${shoe.shoe_name}.jpg`} alt={shoe.shoe_name} className="shoe-image" />
+          <img
+            src={`/images/${shoe.shoe_name
+              .replace(/\s+/g, "_")
+              .toLowerCase()}.jpg`}
+            alt={shoe.shoe_name}
+            className="shoe-image"
+          />
         </div>
 
         <div className="shoe-info-section">
           <p className="shoe-category">{getCategoryName(shoe.category_id)}</p>
           <h1 className="shoe-name">{shoe.shoe_name}</h1>
-          <p className="shoe-price">{shoe.shoe_price.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' })}</p>
+          <p className="shoe-price">
+            {shoe.shoe_price.toLocaleString("id-ID", {
+              style: "currency",
+              currency: "IDR",
+            })}
+          </p>
           <p className="shoe-size">Size: {shoe.shoe_size}</p>
-          <p className="stock-status">In Stock, {shoe.stock}</p>
+          <p className="stock-status">In Stock: {shoe.stock}</p>
 
-          <button className="add-to-cart-button" onClick={addToCart}>ADD TO CART</button>
-          <button className="buy-button" onClick={handleBuyNow}>BUY</button>
+          <button className="add-to-cart-button" onClick={addToCart}>
+            ADD TO CART
+          </button>
+          <button className="buy-button" onClick={handleBuyNow}>
+            BUY NOW
+          </button>
         </div>
       </div>
     </div>

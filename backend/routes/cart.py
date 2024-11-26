@@ -64,6 +64,7 @@ def add_to_cart():
     db.session.commit()
     return jsonify({'message': 'Item added to cart successfully'}), 201
 
+
 @cart_bp.route('/api/cart/<int:id_cart>', methods=['DELETE'])
 def remove_from_cart(id_cart):
     item = Cart.query.get(id_cart)

@@ -9,8 +9,8 @@ db_path = 'D:\\Kuliah\\V\\RNR-Webstore\\backend\\instance\\site.db'
 conn = sqlite3.connect(db_path)
 cursor = conn.cursor()
 
-# Kosongkan tabel user terlebih dahulu
-cursor.execute("DELETE FROM user")
+# # Kosongkan tabel user terlebih dahulu
+# cursor.execute("DELETE FROM user")
 
 # Menambahkan 1 admin dan 1 user
 # Data untuk admin
@@ -33,7 +33,7 @@ cursor.execute('''
 # Data untuk user
 user_username = 'user1'
 user_password = generate_password_hash('userpassword1', method='pbkdf2:sha256')
-user_email = 'user1@example.com'
+user_email = 'user@example.com'
 user_address = 'User Address'
 user_phone = '0812345679'
 user_first_name = 'User'
