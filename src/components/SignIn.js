@@ -24,15 +24,21 @@ function SignIn({ onLogin }) {
       if (response.status === 200) {
         onLogin(response.data.username);
 
-        // Store user details and role in localStorage
+        // Store user details, role, and JWT in localStorage
         localStorage.setItem("username", response.data.username);
         localStorage.setItem("role", response.data.role);
+
+        // Store JWT token
+        if (response.data.token) {
+          localStorage.setItem("token", response.data.token); // Save JWT token
+        }
 
         // You can also store user ID if needed (assuming you have user_id in the response)
         if (response.data.user_id) {
           localStorage.setItem("user_id", response.data.user_id);
         }
 
+        // Navigate based on the role
         if (response.data.role === "Admin") {
           navigate("/admin");
         } else {

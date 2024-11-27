@@ -3,6 +3,7 @@ from config import Config
 from models import db
 from flask_migrate import Migrate
 from flask_cors import CORS
+from flask_jwt_extended import JWTManager  # Import JWTManager
 from routes.users import users_bp
 from routes.orders import orders_bp
 from routes.payments import payments_bp
@@ -13,14 +14,21 @@ from routes.wishlist import wishlist_bp
 from routes.userInteraction import user_interaction_bp
 from routes.shoeRecomendation import shoe_recommendation_bp
 
+# Inisialisasi aplikasi Flask
 app = Flask(__name__)
 app.config.from_object(Config)
+
+# Konfigurasi untuk JWT
+app.config['JWT_SECRET_KEY'] = 'your_secret_key'  # Pastikan kunci rahasia ada
 
 # Inisialisasi database
 db.init_app(app)
 
 # Inisialisasi Flask-Migrate untuk migrasi database
 migrate = Migrate(app, db)
+
+# Inisialisasi JWTManager
+jwt = JWTManager(app)
 
 # Mengaktifkan CORS untuk seluruh aplikasi Flask
 CORS(app, resources={r"/api/*": {"origins": "*"}})
