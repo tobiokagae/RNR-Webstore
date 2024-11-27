@@ -17,14 +17,26 @@ def get_cart(user_id):
     if cart_items:
         result = []
         for item in cart_items:
-            result.append({
-                'id_cart': item.id_cart,
-                'shoe_detail_id': item.shoe_detail_id,
-                'id_user': item.id_user,
-                'quantity': item.quantity,
-                'date_added': item.date_added,
-                'last_updated': item.last_updated
-            })
+            shoe = ShoeDetail.query.get(item.shoe_detail_id)  # Ambil data sepatu berdasarkan shoe_detail_id
+            if shoe:
+                result.append({
+                    'id_cart': item.id_cart,
+                    'shoe_detail_id': item.shoe_detail_id,
+                    'id_user': item.id_user,
+                    'quantity': item.quantity,
+                    'shoe_name': shoe.shoe_name,   # Menambahkan nama sepatu
+                    'shoe_price': shoe.shoe_price, # Menambahkan harga sepatu
+                    'shoe_size': shoe.shoe_size,   # Menambahkan ukuran sepatu
+                    'stock': shoe.stock,           # Menambahkan stok sepatu
+                    'date_added': item.date_added,
+                    'last_updated': item.last_updated
+                })
+            else:
+                # Jika sepatu tidak ditemukan, kirimkan pesan kesalahan
+                result.append({
+                    'id_cart': item.id_cart,
+                    'message': 'Shoe not found'
+                })
         return jsonify(result), 200
     return jsonify({'message': 'Cart is empty'}), 404
 
@@ -102,14 +114,22 @@ def update_cart(id_cart):
 def get_cart_item(id_cart):
     item = Cart.query.get(id_cart)
     if item:
-        return jsonify({
-            'id_cart': item.id_cart,
-            'shoe_detail_id': item.shoe_detail_id,
-            'id_user': item.id_user,
-            'quantity': item.quantity,
-            'date_added': item.date_added,
-            'last_updated': item.last_updated
-        }), 200
+        shoe = ShoeDetail.query.get(item.shoe_detail_id)  # Ambil data sepatu berdasarkan shoe_detail_id
+        if shoe:
+            return jsonify({
+                'id_cart': item.id_cart,
+                'shoe_detail_id': item.shoe_detail_id,
+                'id_user': item.id_user,
+                'quantity': item.quantity,
+                'shoe_name': shoe.shoe_name,   # Nama sepatu
+                'shoe_price': shoe.shoe_price, # Harga sepatu
+                'shoe_size': shoe.shoe_size,   # Ukuran sepatu
+                'stock': shoe.stock,           # Stok sepatu
+                'date_added': item.date_added,
+                'last_updated': item.last_updated
+            }), 200
+        else:
+            return jsonify({'message': 'Shoe not found'}), 404
     return jsonify({'message': 'Item not found'}), 404
 
 @cart_bp.route('/api/cart', methods=['GET'])
@@ -117,12 +137,18 @@ def get_all_cart_items():
     cart_items = Cart.query.all()
     result = []
     for item in cart_items:
-        result.append({
-            'id_cart': item.id_cart,
-            'shoe_detail_id': item.shoe_detail_id,
-            'id_user': item.id_user,
-            'quantity': item.quantity,
-            'date_added': item.date_added,
-            'last_updated': item.last_updated
-        })
+        shoe = ShoeDetail.query.get(item.shoe_detail_id)  # Ambil data sepatu berdasarkan shoe_detail_id
+        if shoe:
+            result.append({
+                'id_cart': item.id_cart,
+                'shoe_detail_id': item.shoe_detail_id,
+                'id_user': item.id_user,
+                'quantity': item.quantity,
+                'shoe_name': shoe.shoe_name,   # Nama sepatu
+                'shoe_price': shoe.shoe_price, # Harga sepatu
+                'shoe_size': shoe.shoe_size,   # Ukuran sepatu
+                'stock': shoe.stock,           # Stok sepatu
+                'date_added': item.date_added,
+                'last_updated': item.last_updated
+            })
     return jsonify(result), 200

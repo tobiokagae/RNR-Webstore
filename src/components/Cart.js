@@ -48,7 +48,6 @@ function Cart() {
     if (confirmDelete) {
       const updatedCart = cartItems.filter((item) => item.id_cart !== id);
       setCartItems(updatedCart);
-      localStorage.setItem("cart", JSON.stringify(updatedCart));
 
       // Call API to delete the item from the backend
       fetch(`/api/cart/${id}`, { method: "DELETE" })
@@ -78,8 +77,9 @@ function Cart() {
             );
             return shoeDetail ? (
               <div key={item.id_cart} className="cart-item">
+                {/* Cek jika image tersedia, jika tidak tampilkan placeholder */}
                 <img
-                  src={shoeDetail.image}
+                  src={shoeDetail.image || "/placeholder.jpg"}
                   alt={shoeDetail.shoe_name}
                   className="cart-item-image"
                 />

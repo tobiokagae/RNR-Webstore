@@ -136,7 +136,7 @@ def get_user(user_id):
 
 # Mendapatkan Semua Pengguna
 @users_bp.route('/api/users', methods=['GET'])
-@jwt_required()  # Pastikan hanya admin yang bisa mengakses
+# @jwt_required()  # Pastikan hanya admin yang bisa mengakses
 def get_users():
     users = User.query.all()
     if users:

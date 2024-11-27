@@ -8,6 +8,8 @@ import {
   Navigate,
 } from "react-router-dom";
 import "./App.css";
+import Swal from "sweetalert2"; // Import SweetAlert2
+
 import Categories from "./components/Categories";
 import Recomended from "./components/Recomended";
 import SignIn from "./components/SignIn";
@@ -43,9 +45,9 @@ const AdminRoute = ({ children }) => {
   const user = localStorage.getItem("user");
   const role = localStorage.getItem("role");
 
-  if (!user || role !== "admin") {
+  if (!user || role !== "Admin") {
     // Jika pengguna bukan admin, arahkan ke halaman home
-    return <Navigate to="/signin" />;
+    return <Navigate to="/" />;
   }
   return children;
 };
@@ -73,11 +75,22 @@ function App() {
   };
 
   const handleLogout = () => {
-    setUser(null);
-    setRole(null);
-    localStorage.removeItem("user");
-    localStorage.removeItem("role");
-    navigate("/");
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You want to log out?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, log out!",
+      cancelButtonText: "No, stay logged in",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        setUser(null);
+        setRole(null);
+        localStorage.removeItem("user");
+        localStorage.removeItem("role");
+        navigate("/");
+      }
+    });
   };
 
   return (
@@ -97,21 +110,35 @@ function App() {
           >
             Categories
           </Link>
-          <Link
-            to={user ? "/recomended" : "/signin"}
-            className="menu-item text-xl hover:text-gray-300"
-          >
-            Recomended
-          </Link>
+
+          {/* Hanya tampilkan 'Recomended' jika bukan admin */}
+          {role !== "Admin" && (
+            <Link
+              to={user ? "/recomended" : "/signin"}
+              className="menu-item text-xl hover:text-gray-300"
+            >
+              Recomended
+            </Link>
+          )}
+
           <Link
             to={user ? "/products" : "/signin"}
             className="menu-item text-xl hover:text-gray-300"
           >
             Products
           </Link>
-          {user && (
+
+          {/* Hanya tampilkan 'Cart' jika bukan admin */}
+          {role !== "Admin" && user && (
             <Link to="/cart" className="menu-item text-xl hover:text-gray-300">
               Cart
+            </Link>
+          )}
+
+          {/* Hanya tampilkan 'Dashboard' jika admin */}
+          {role === "Admin" && (
+            <Link to="/admin" className="menu-item text-xl hover:text-gray-300">
+              Dashboard
             </Link>
           )}
         </nav>
@@ -176,6 +203,7 @@ function App() {
             </section>
           }
         />
+
         {/* Public Routes */}
         <Route
           path="/categories"
@@ -188,9 +216,13 @@ function App() {
         <Route
           path="/recomended"
           element={
-            <PrivateRoute>
-              <Recomended />
-            </PrivateRoute>
+            role !== "Admin" ? (
+              <PrivateRoute>
+                <Recomended />
+              </PrivateRoute>
+            ) : (
+              <Navigate to="/" /> // Redirect ke halaman utama jika admin
+            )
           }
         />
         <Route path="/signin" element={<SignIn onLogin={handleLogin} />} />
@@ -206,9 +238,13 @@ function App() {
         <Route
           path="/cart"
           element={
-            <PrivateRoute>
-              <Cart />
-            </PrivateRoute>
+            role !== "Admin" ? (
+              <PrivateRoute>
+                <Cart />
+              </PrivateRoute>
+            ) : (
+              <Navigate to="/" /> // Redirect ke halaman utama jika admin
+            )
           }
         />
         <Route

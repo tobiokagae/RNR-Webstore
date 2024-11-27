@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
+import Swal from "sweetalert2"; // Import SweetAlert2
 
 function SignIn({ onLogin }) {
   const [credentials, setCredentials] = useState({
@@ -20,7 +21,14 @@ function SignIn({ onLogin }) {
         "http://localhost:5000/api/users/login",
         credentials
       );
-      alert(response.data.message);
+      // Gunakan SweetAlert untuk menampilkan pesan sukses
+      Swal.fire({
+        title: "Success!",
+        text: response.data.message,
+        icon: "success",
+        confirmButtonText: "OK",
+      });
+
       if (response.status === 200) {
         onLogin(response.data.username);
 
@@ -39,7 +47,7 @@ function SignIn({ onLogin }) {
         }
 
         // Navigate based on the role
-        if (response.data.role === "Admin") {
+        if (response.data.role === "admin") {
           navigate("/admin");
         } else {
           navigate("/");
@@ -47,9 +55,15 @@ function SignIn({ onLogin }) {
       }
     } catch (error) {
       console.error("Error:", error);
-      alert(
-        error.response?.data?.message || "An error occurred. Please try again."
-      );
+      // Gunakan SweetAlert untuk menampilkan pesan error
+      Swal.fire({
+        title: "Error!",
+        text:
+          error.response?.data?.message ||
+          "An error occurred. Please try again.",
+        icon: "error",
+        confirmButtonText: "OK",
+      });
     }
   };
 
