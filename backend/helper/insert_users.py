@@ -12,8 +12,8 @@ cursor = conn.cursor()
 # Kosongkan tabel user terlebih dahulu
 cursor.execute("DELETE FROM user")
 
-# Membuat 100 pengguna dengan password yang di-hash
-for n in range(1, 101):
+# # Membuat 25 pengguna dengan password yang di-hash
+for n in range(1, 26):  # Ubah dari 101 ke 26 untuk membuat 25 pengguna
     # Hash password
     password = generate_password_hash(f'password{n}', method='pbkdf2:sha256')
     
@@ -39,4 +39,4 @@ for n in range(1, 101):
 conn.commit()
 conn.close()
 
-print("100 users with hashed passwords inserted successfully!")
+print("25 users with hashed passwords inserted successfully!")

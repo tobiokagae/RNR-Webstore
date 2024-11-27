@@ -30,17 +30,16 @@ query = '''
 WITH RECURSIVE generate_series AS (
     SELECT 1 AS n
     UNION ALL
-    SELECT n + 1 FROM generate_series WHERE n <= 500  -- Perbanyak data interaksi (500 data)
+    SELECT n + 1 FROM generate_series WHERE n <= 10000  -- Perbanyak data interaksi (10000 data)
 )
 INSERT INTO user_interaction (id_user, shoe_detail_id, interaction_type, interaction_date)
 SELECT
-    (n % 100) + 1 AS id_user,  -- Menggunakan user_id dari 1 sampai 100 (100 user)
+    (n % 25) + 1 AS id_user,  -- Menggunakan user_id dari 1 sampai 25 (25 user)
     (n % 5) + 1 AS shoe_detail_id,  -- Menggunakan shoe_detail_id dari 1 sampai 5 (contoh)
     CASE
-        WHEN n % 4 = 0 THEN 'view'
-        WHEN n % 4 = 1 THEN 'wishlist'
-        WHEN n % 4 = 2 THEN 'cart'
-        ELSE 'order'
+        WHEN n % 5 = 0 THEN 'view'  -- 40% untuk order (1 dari 5 data)
+        WHEN n % 5 = 1 THEN 'cart'   -- 40% untuk cart (1 dari 5 data)
+        ELSE 'order'                  -- 20% untuk view (3 dari 5 data)
     END AS interaction_type,
     CURRENT_TIMESTAMP AS interaction_date
 FROM generate_series;
@@ -53,4 +52,4 @@ cursor.execute(query)
 conn.commit()
 conn.close()
 
-print("User interactions inserted successfully!")
+print("User interactions inserted successfully with user_id up to 25!")

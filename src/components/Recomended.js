@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
 import axios from "axios";
-import "./Recomended.css";
 
 function Recomended() {
   const [products, setProducts] = useState([]);
@@ -56,17 +54,17 @@ function Recomended() {
 
   // Jika sedang loading
   if (loading) {
-    return <div>Loading...</div>;
+    return <div className="text-center py-4">Loading...</div>;
   }
 
   // Jika ada error
   if (error) {
-    return <div>Error: {error}</div>;
+    return <div className="text-center py-4 text-red-500">Error: {error}</div>;
   }
 
   return (
-    <div className="recomended-page max-w-7xl mx-auto p-6">
-      <h1 className="recomended-title text-4xl font-bold text-center mb-8">
+    <div className="recomended-page max-w-7xl mx-auto px-4 py-8">
+      <h1 className="recomended-title text-4xl font-bold text-center text-gray-800 mb-8">
         Recommended for You
       </h1>
       <div className="product-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
@@ -75,16 +73,11 @@ function Recomended() {
             className="product-card bg-white shadow-lg rounded-lg overflow-hidden"
             key={product.id}
           >
-            <img
-              src={`/images/shoes/${product.id}.jpg`} // Asumsikan gambar diambil berdasarkan id
-              alt={product.shoeName}
-              className="product-image w-full h-64 object-cover"
-            />
             <div className="product-details p-4">
               <p className="product-category text-sm text-gray-500">
                 {product.categoryId} {/* Menampilkan kategori berdasarkan id */}
               </p>
-              <p className="product-name text-lg font-semibold mt-2">
+              <p className="product-name text-lg font-semibold mt-2 text-gray-800">
                 {product.shoeName}
               </p>
               <p className="product-price text-xl font-bold text-gray-900 mt-2">
@@ -96,10 +89,10 @@ function Recomended() {
                 {product.shoePrice}
               </p>
               <div className="flex mt-4 gap-4">
-                <button className="cart-btn bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">
-                  +
+                <button className="cart-btn bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-300">
+                  Add to Cart
                 </button>
-                <button className="wishlist-btn text-red-500 hover:text-red-600 text-xl">
+                <button className="wishlist-btn text-red-500 hover:text-red-600 text-2xl">
                   ❤
                 </button>
               </div>

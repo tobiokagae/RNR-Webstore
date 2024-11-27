@@ -16,11 +16,19 @@ def get_recommendations_for_user(user_id):
     if recommendations:
         result = []
         for rec in recommendations:
-            result.append({
-                'id_shoe_recomendation': rec.id_shoe_recomendation,
-                'id_user': rec.id_user,
-                'shoe_detail_id': rec.shoe_detail_id
-            })
+            shoe = ShoeDetail.query.get(rec.shoe_detail_id)
+            if shoe:
+                result.append({
+                    'id_shoe_recomendation': rec.id_shoe_recomendation,
+                    'id_user': rec.id_user,
+                    'shoe_detail_id': rec.shoe_detail_id,
+                    'shoe_name': shoe.shoe_name,
+                    'shoe_price': shoe.shoe_price,
+                    'shoe_size': shoe.shoe_size,
+                    'stock': shoe.stock,
+                    'date_added': shoe.date_added,
+                    'last_updated': shoe.last_updated
+                })
         return jsonify(result), 200
     return jsonify({'message': 'No recommendations found for this user'}), 404
 
@@ -84,11 +92,19 @@ def update_recommendation(id_shoe_recomendation):
 def get_recommendation(id_shoe_recomendation):
     recommendation = ShoeRecomendationForUsers.query.get(id_shoe_recomendation)
     if recommendation:
-        return jsonify({
-            'id_shoe_recomendation': recommendation.id_shoe_recomendation,
-            'id_user': recommendation.id_user,
-            'shoe_detail_id': recommendation.shoe_detail_id
-        }), 200
+        shoe = ShoeDetail.query.get(recommendation.shoe_detail_id)
+        if shoe:
+            return jsonify({
+                'id_shoe_recomendation': recommendation.id_shoe_recomendation,
+                'id_user': recommendation.id_user,
+                'shoe_detail_id': recommendation.shoe_detail_id,
+                'shoe_name': shoe.shoe_name,
+                'shoe_price': shoe.shoe_price,
+                'shoe_size': shoe.shoe_size,
+                'stock': shoe.stock,
+                'date_added': shoe.date_added,
+                'last_updated': shoe.last_updated
+            }), 200
     return jsonify({'message': 'Recommendation not found'}), 404
 
 @shoe_recommendation_bp.route('/api/shoe_recommendations', methods=['GET'])
@@ -96,9 +112,17 @@ def get_all_recommendations():
     recommendations = ShoeRecomendationForUsers.query.all()
     result = []
     for rec in recommendations:
-        result.append({
-            'id_shoe_recomendation': rec.id_shoe_recomendation,
-            'id_user': rec.id_user,
-            'shoe_detail_id': rec.shoe_detail_id
-        })
+        shoe = ShoeDetail.query.get(rec.shoe_detail_id)
+        if shoe:
+            result.append({
+                'id_shoe_recomendation': rec.id_shoe_recomendation,
+                'id_user': rec.id_user,
+                'shoe_detail_id': rec.shoe_detail_id,
+                'shoe_name': shoe.shoe_name,
+                'shoe_price': shoe.shoe_price,
+                'shoe_size': shoe.shoe_size,
+                'stock': shoe.stock,
+                'date_added': shoe.date_added,
+                'last_updated': shoe.last_updated
+            })
     return jsonify(result), 200
