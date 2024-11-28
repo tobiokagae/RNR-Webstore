@@ -67,32 +67,36 @@ function Recomended() {
       <h1 className="recomended-title text-4xl font-bold text-center text-gray-800 mb-8">
         Recommended for You
       </h1>
-      <div className="product-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+      <div className="product-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 bg-black p-4">
         {products.map((product) => (
           <div
-            className="product-card bg-white shadow-lg rounded-lg overflow-hidden"
-            key={product.id}
-          >
-            <div className="product-details p-4">
-              <p className="product-category text-sm text-gray-500">
-                {product.categoryId} {/* Menampilkan kategori berdasarkan id */}
+            className="product-card bg-blue-500 text-white shadow-lg rounded-lg overflow-hidden flex flex-col justify-between"
+            key={product.id}>
+            {/* Gambar Produk */}
+            <div className="image-container w-full h-48 bg-white">
+              <img
+                src={`/images/${product.shoeName}.jpg`}
+                alt={product.shoeName}
+                className="w-full h-full object-cover"
+              />
+            </div>
+
+            {/* Detail Produk */}
+            <div className="product-details p-4 flex flex-col">
+              <p className="product-category text-sm mb-1">
+                Category: {product.categoryId}
               </p>
-              <p className="product-name text-lg font-semibold mt-2 text-gray-800">
+              <p className="product-name text-lg font-semibold mb-2">
                 {product.shoeName}
               </p>
-              <p className="product-price text-xl font-bold text-gray-900 mt-2">
-                <span className="original-price text-sm text-gray-500 line-through">
-                  {/* Menampilkan harga asli jika ada */}
-                  {product.originalPrice}
-                </span>
-                <br />
+              <p className="product-price text-xl font-bold mb-4">
                 {product.shoePrice}
               </p>
-              <div className="flex mt-4 gap-4">
-                <button className="cart-btn bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-300">
+              <div className="flex justify-between gap-4">
+                <button className="cart-btn bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition duration-300">
                   Add to Cart
                 </button>
-                <button className="wishlist-btn text-red-500 hover:text-red-600 text-2xl">
+                <button className="wishlist-btn text-red-500 hover:text-red-700 text-2xl">
                   ❤
                 </button>
               </div>
@@ -100,6 +104,7 @@ function Recomended() {
           </div>
         ))}
       </div>
+
     </div>
   );
 }

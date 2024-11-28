@@ -94,8 +94,8 @@ function App() {
   };
 
   return (
-    <div className="App">
-      <header className="navbar flex items-center justify-between p-4 bg-gray-800 text-white">
+    <div className="App bg-gray-100 min-h-screen">
+      <header className="navbar flex items-center justify-between p-4 bg-blue-600 text-white">
         <div className="logo text-3xl font-bold">R&R</div>
         <nav className="menu flex space-x-4">
           <Link
@@ -131,7 +131,11 @@ function App() {
           {/* Hanya tampilkan 'Cart' jika bukan admin */}
           {role !== "Admin" && user && (
             <Link to="/cart" className="menu-item text-xl hover:text-gray-300">
-              Cart
+              <img
+                  src="/images/shopping-cart.png" // Ubah path ini ke lokasi gambar Anda
+                  alt="Cart"
+                  className="w-8 h-8" // Atur ukuran gambar sesuai kebutuhan
+              />
             </Link>
           )}
 
@@ -180,7 +184,7 @@ function App() {
           element={
             <section className="hero flex items-center justify-between p-8">
               <div className="text-container max-w-lg">
-                <h1 className="title text-4xl font-bold text-gray-800 mb-4">
+                <h1 className="title text-4xl font-bold text-blue-800 mb-4">
                   Roots & Routes
                 </h1>
                 <p className="description text-lg text-gray-600">
@@ -195,7 +199,7 @@ function App() {
               </div>
               <div className="image-container">
                 <img
-                  src="/images/sneakers_nike.png"
+                  src="/images/logo_R&R2.jpg"
                   alt="Shoes"
                   className="w-96 h-auto"
                 />

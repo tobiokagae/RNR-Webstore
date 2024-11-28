@@ -76,10 +76,10 @@ function Product({ userId }) {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800 text-white flex flex-col items-center">
-      <h2 className="text-2xl font-bold text-center mb-5">Best Product R&R</h2>
+    <div className="min-h-screen bg-gradient-to-b from-white-900 to-gray-800 text-white flex flex-col items-center">
+      <h2 className="text-2xl font-bold text-center text-black mb-5">Best Product R&R</h2>
       <div className="mb-5">
-        <span className="text-lg">Filtered Shoes by: </span>
+        <span className="text-lg text-black">Filtered Shoes by: </span>
         <select
           value={selectedCategory}
           onChange={(e) => setSelectedCategory(e.target.value)}
