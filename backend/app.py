@@ -1,9 +1,11 @@
+# app.py
 from flask import Flask, jsonify
 from config import Config
+from data_training import train_nmf_model
 from models import db
 from flask_migrate import Migrate
 from flask_cors import CORS
-from flask_jwt_extended import JWTManager  # Import JWTManager
+from flask_jwt_extended import JWTManager
 from routes.users import users_bp
 from routes.orders import orders_bp
 from routes.payments import payments_bp
@@ -19,10 +21,25 @@ app = Flask(__name__)
 app.config.from_object(Config)
 
 # Konfigurasi untuk JWT
-app.config['JWT_SECRET_KEY'] = 'your_secret_key'  # Pastikan kunci rahasia ada
+app.config['JWT_SECRET_KEY'] = '9b1df6b4d7f2c3b58d1b6398c0f47a9a7a3e8d2b4f6a1e3f'
 
 # Inisialisasi database
 db.init_app(app)
+
+@app.route('/api/train_recommendation', methods=['POST'])
+def train_recommendation():
+    """
+    Endpoint untuk memulai proses training NMF model.
+    Dipanggil saat tab rekomendasi di frontend ditekan.
+    """
+    try:
+        # Memanggil fungsi training dari file data_training.py
+        train_nmf_model()  
+        return jsonify({"message": "Model training successfully completed!"}), 200
+    except Exception as e:
+        # Log kesalahan lebih lanjut
+        app.logger.error(f'Error saat melatih model: {str(e)}')
+        return jsonify({"error": str(e)}), 500
 
 # Inisialisasi Flask-Migrate untuk migrasi database
 migrate = Migrate(app, db)

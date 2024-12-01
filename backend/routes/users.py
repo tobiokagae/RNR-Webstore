@@ -8,12 +8,13 @@ import pytz
 # Inisialisasi Blueprint
 users_bp = Blueprint('users', __name__)
 
-# Inisialisasi JWT Manager
+# Fungsi untuk mendapatkan waktu WITA
 def get_current_time_wita():
     wita_tz = pytz.timezone('Asia/Makassar')
     return datetime.now(wita_tz)
 
-# Register User
+
+# Function For Registration
 @users_bp.route('/api/users/register', methods=['POST'])
 def register():
     data = request.json
@@ -27,7 +28,7 @@ def register():
     if existing_user:
         return jsonify({'message': 'Username already exists'}), 409
     
-    # Hash password dengan pbkdf2:sha256
+    # Hash password
     hashed_password = generate_password_hash(data['password'], method='pbkdf2:sha256')
     
     # Buat pengguna baru
@@ -45,8 +46,7 @@ def register():
 
     return jsonify({'message': 'User registered successfully'}), 201
 
-
-# Login Pengguna
+# Function for Login 
 @users_bp.route('/api/users/login', methods=['POST'])
 def login():
     data = request.json
@@ -60,24 +60,21 @@ def login():
     
     # Cek apakah password benar
     if user and check_password_hash(user.password, data['password']):
-        # Generate JWT token
         access_token = create_access_token(identity=user.user_id)
         return jsonify({
             'message': 'Login successful',
-            'access_token': access_token,  # Token untuk autentikasi
+            'access_token': access_token,
             'username': user.username,
             'role': user.role,
             'user_id': user.user_id
         }), 200
     return jsonify({'message': 'Invalid credentials'}), 401
 
-
-# Update Profil Pengguna
+# Function for Update Profile User
 @users_bp.route('/api/users/profile/<int:user_id>', methods=['PUT'])
-@jwt_required()  # Pastikan hanya user yang login yang bisa mengakses
+@jwt_required()
 def update_profile(user_id):
-    # Memastikan ID pengguna yang melakukan permintaan sesuai dengan ID yang terdaftar
-    current_user_id = get_jwt_identity()  # Mendapatkan ID pengguna dari token JWT
+    current_user_id = get_jwt_identity()
     if current_user_id != user_id:
         return jsonify({'message': 'Permission denied'}), 403
     
@@ -87,14 +84,13 @@ def update_profile(user_id):
     if not user:
         return jsonify({'message': 'User not found'}), 404
 
+    # Cek apakah username sudah digunakan oleh user lain
     new_username = data.get('username', user.username)
-
-    # Cek apakah username sudah ada di database untuk user lain
     existing_user = User.query.filter(User.username == new_username, User.user_id != user_id).first()
     if existing_user:
         return jsonify({'message': 'Username already exists'}), 409
 
-    # Update profil pengguna
+    # Update data profil
     user.username = new_username
     user.email = data.get('email', user.email)
     user.first_name = data.get('first_name', user.first_name)
@@ -106,17 +102,15 @@ def update_profile(user_id):
     db.session.commit()
     return jsonify({'message': 'Profile updated successfully'}), 200
 
-
-# Logout Pengguna (token invalidation di sisi client)
+# Function for Logout User
 @users_bp.route('/api/users/logout', methods=['POST'])
 @jwt_required()
 def logout():
     return jsonify({'message': 'Logged out successfully'}), 200
 
-
-# Mendapatkan Informasi Pengguna berdasarkan ID
+# Functon for Get User By ID
 @users_bp.route('/api/users/<int:user_id>', methods=['GET'])
-@jwt_required()  # Pastikan hanya user yang login yang bisa mengakses
+@jwt_required()
 def get_user(user_id):
     user = User.query.get(user_id)
     if user:
@@ -134,30 +128,28 @@ def get_user(user_id):
         }), 200
     return jsonify({'message': 'User not found'}), 404
 
-# Mendapatkan Semua Pengguna
+# Function for Get All Users
 @users_bp.route('/api/users', methods=['GET'])
-# @jwt_required()  # Pastikan hanya admin yang bisa mengakses
+# @jwt_required()  # Uncomment jika hanya admin yang boleh mengakses
 def get_users():
     users = User.query.all()
     if users:
-        result = []
-        for user in users:
-            result.append({
-                'user_id': user.user_id,
-                'username': user.username,
-                'email': user.email,
-                'first_name': user.first_name,
-                'last_name': user.last_name,
-                'address': user.address,
-                'phone': user.phone,
-                'role': user.role,
-                'date_added': user.date_added,
-                'last_updated': user.last_updated
-            })
+        result = [{
+            'user_id': user.user_id,
+            'username': user.username,
+            'email': user.email,
+            'first_name': user.first_name,
+            'last_name': user.last_name,
+            'address': user.address,
+            'phone': user.phone,
+            'role': user.role,
+            'date_added': user.date_added,
+            'last_updated': user.last_updated
+        } for user in users]
         return jsonify(result), 200
     return jsonify({'message': 'No users found'}), 404
 
-# Hapus Pengguna berdasarkan ID
+# Function for Delete User By ID
 @users_bp.route('/api/users/<int:user_id>', methods=['DELETE'])
 @jwt_required()  # Pastikan hanya admin yang bisa mengakses
 def delete_user(user_id):

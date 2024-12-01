@@ -1,16 +1,16 @@
-import React, { useState } from 'react';
-import { useParams } from 'react-router-dom';
-import './Payment.css';
+import React, { useState } from "react";
+import { useParams } from "react-router-dom";
+import "./css/Payment.css";
 
 function Payment() {
   const { id } = useParams(); // The product id from the URL
-  const [paymentMethod, setPaymentMethod] = useState('');
-  const [paymentStatus, setPaymentStatus] = useState('Pending');
+  const [paymentMethod, setPaymentMethod] = useState("");
+  const [paymentStatus, setPaymentStatus] = useState("Pending");
 
   const handlePayment = () => {
     // Handle payment logic here, and update payment status accordingly
-    setPaymentStatus('Success');
-    alert('Payment successful!');
+    setPaymentStatus("Success");
+    alert("Payment successful!");
   };
 
   return (
@@ -23,9 +23,9 @@ function Payment() {
         <div className="payment-card-body">
           <div className="payment-info-item">
             <label htmlFor="payment-method">Payment Method:</label>
-            <select 
-              id="payment-method" 
-              value={paymentMethod} 
+            <select
+              id="payment-method"
+              value={paymentMethod}
               onChange={(e) => setPaymentMethod(e.target.value)}
             >
               <option value="">Select a payment method</option>
@@ -35,10 +35,14 @@ function Payment() {
             </select>
           </div>
           <div className="payment-status">
-            <p>Payment Status: <strong>{paymentStatus}</strong></p>
+            <p>
+              Payment Status: <strong>{paymentStatus}</strong>
+            </p>
           </div>
           <div className="payment-buttons">
-            <button className="confirm-button" onClick={handlePayment}>Confirm Payment</button>
+            <button className="confirm-button" onClick={handlePayment}>
+              Confirm Payment
+            </button>
             <button className="cancel-button">Cancel</button>
           </div>
         </div>

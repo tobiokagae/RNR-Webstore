@@ -21,20 +21,35 @@ function AdminUser() {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const navigate = useNavigate();
 
+  // Function to get the JWT token from localStorage
+  const getToken = () => {
+    return localStorage.getItem("token"); // Assuming your JWT token is stored as 'token'
+  };
+
+  // Fetch all users from API
   useEffect(() => {
     fetchUsers();
   }, []);
 
   const fetchUsers = () => {
     axios
-      .get("http://localhost:5000/api/users")
+      .get("http://localhost:5000/api/users", {
+        headers: {
+          Authorization: `Bearer ${getToken()}`, // Add JWT token to Authorization header
+        },
+      })
       .then((response) => setUsers(response.data))
       .catch((error) => console.error("Error fetching users:", error));
   };
 
+  // Create new user
   const handleCreateUser = () => {
     axios
-      .post("http://localhost:5000/api/users/register", newUser)
+      .post("http://localhost:5000/api/users/register", newUser, {
+        headers: {
+          Authorization: `Bearer ${getToken()}`, // Add JWT token to Authorization header
+        },
+      })
       .then(() => {
         fetchUsers();
         setModalIsOpen(false);
@@ -54,6 +69,7 @@ function AdminUser() {
       });
   };
 
+  // Edit existing user
   const handleEditUser = (user) => {
     setEditUser(user);
   };
@@ -62,7 +78,12 @@ function AdminUser() {
     axios
       .put(
         `http://localhost:5000/api/users/profile/${editUser.user_id}`,
-        editUser
+        editUser,
+        {
+          headers: {
+            Authorization: `Bearer ${getToken()}`, // Add JWT token to Authorization header
+          },
+        }
       )
       .then(() => {
         fetchUsers();
@@ -75,6 +96,7 @@ function AdminUser() {
       });
   };
 
+  // Delete user
   const handleDeleteUser = (userId) => {
     Swal.fire({
       title: "Are you sure?",
@@ -87,7 +109,11 @@ function AdminUser() {
     }).then((result) => {
       if (result.isConfirmed) {
         axios
-          .delete(`http://localhost:5000/api/users/${userId}`)
+          .delete(`http://localhost:5000/api/users/${userId}`, {
+            headers: {
+              Authorization: `Bearer ${getToken()}`, // Add JWT token to Authorization header
+            },
+          })
           .then(() => {
             fetchUsers();
             Swal.fire("Deleted!", "User has been deleted.", "success");

@@ -39,13 +39,21 @@ function SignIn({ onLogin }) {
 
       const { username, role, access_token, user_id } = response.data;
 
+      // Simpan informasi user, termasuk role di localStorage
       localStorage.setItem("username", username);
-      localStorage.setItem("role", role);
+      localStorage.setItem("role", role); // Menyimpan role (admin/user)
       localStorage.setItem("token", access_token);
       localStorage.setItem("user_id", user_id);
+      localStorage.setItem("isLoggedIn", true);
 
-      onLogin(username);
-      role === "admin" ? navigate("/admin") : navigate("/");
+      onLogin(username, role);
+
+      // Navigasi berdasarkan role
+      if (role === "admin") {
+        navigate("/admin"); // Arahkan ke halaman admin jika role admin
+      } else {
+        navigate("/"); // Arahkan ke halaman utama jika role bukan admin
+      }
     } catch (error) {
       Swal.fire({
         title: "Login Failed",
