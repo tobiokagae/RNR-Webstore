@@ -23,6 +23,8 @@ import AdminPayments from "./components/admin/AdminPayments";
 import AdminWishlists from "./components/admin/AdminWishlists";
 import AdminOrders from "./components/admin/AdminOrders";
 import AdminInteractions from "./components/admin/AdminInteractions";
+import OrderPage from "./components/client/OrderPage";
+import ProfilePage from "./components/client/ProfilePage";
 
 // PrivateRoute Component
 const PrivateRoute = ({ children }) => {
@@ -60,7 +62,7 @@ const Home = () => {
         </p>
       </div>
       <div className="image-container">
-        <img src="/images/logo_R&R2.jpg" alt="Shoes" className="w-96 h-auto" />
+        <img src="/images/cart_ring.png" alt="Shoes" className="w-96 h-auto" />
       </div>
     </section>
   );
@@ -70,6 +72,7 @@ function App() {
   const [user, setUser] = useState(null);
   const [role, setRole] = useState(null);
   const navigate = useNavigate();
+  const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
     const storedUser = localStorage.getItem("username");
@@ -87,6 +90,11 @@ function App() {
     localStorage.setItem("username", username);
     localStorage.setItem("role", userRole);
   };
+
+  const toggleMenu = () => {
+    setIsOpen(!isOpen);
+  };
+
 
   const handleLogout = () => {
     Swal.fire({
@@ -134,6 +142,14 @@ function App() {
               >
                 Products
               </Link>
+
+              <Link
+                to={user ? "/orders" : "/signin"}
+                className="menu-item text-xl hover:text-gray-300"
+              >
+                Order
+              </Link>
+
               <Link
                 to="/cart"
                 className="menu-item text-xl hover:text-gray-300"
@@ -191,17 +207,47 @@ function App() {
 
         <div className="auth-buttons flex items-center space-x-4">
           {user ? (
-            <div className="flex items-center space-x-2">
-              <span className="text-lg">
-                Welcome, <span className="font-semibold">{user}</span>
-              </span>
-              <button
-                onClick={handleLogout}
-                className="logout-button bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700"
+            <div className="relative">
+            <button
+              onClick={toggleMenu}
+              className="flex items-center space-x-1 text-lg text-gray-700 hover:text-gray-900 focus:outline-none"
+            >
+              <span>Welcome, {user}</span>
+              <svg
+                className={`w-4 h-4 transition-transform transform ${
+                  isOpen ? "rotate-180" : "rotate-0"
+                }`}
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
               >
-                Logout
-              </button>
-            </div>
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M19 9l-7 7-7-7"
+                />
+              </svg>
+            </button>
+      
+            {isOpen && (
+              <div className="absolute right-0 mt-2 w-40 bg-white rounded-lg shadow-md overflow-hidden z-10">
+                <button
+                  className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  onClick={() => navigate("/profile")}
+                >
+                  Profile
+                </button>
+                <button
+                  className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  onClick={handleLogout}
+                >
+                  Logout
+                </button>
+              </div>
+            )}
+          </div>
           ) : (
             <>
               <Link to="/signin">
@@ -241,6 +287,15 @@ function App() {
           }
         />
         <Route
+          path="/orders"
+          element={
+            <PrivateRoute>
+              <OrderPage />
+            </PrivateRoute>
+          }
+        />
+
+        <Route
           path="/cart"
           element={
             <PrivateRoute>
@@ -248,6 +303,16 @@ function App() {
             </PrivateRoute>
           }
         />
+
+        <Route
+          path="/profile"
+          element={
+            <PrivateRoute>
+              <ProfilePage />
+            </PrivateRoute>
+          }
+        />
+        
         {/* Admin Routes */}
         <Route path="/admin" element={<AdminRoute></AdminRoute>} />
         <Route
