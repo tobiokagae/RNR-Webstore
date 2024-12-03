@@ -10,15 +10,19 @@ function Product({ userId }) {
   const [selectedShoe, setSelectedShoe] = useState(null);
   const [showModal, setShowModal] = useState(false);
 
+  // Pagination states
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 8;
+
   useEffect(() => {
     fetchShoes();
-  }, []); // Fetch shoes only on initial load
+  }, []);
 
   const token = localStorage.getItem("token");
   const id_user = localStorage.getItem("user_id");
 
   useEffect(() => {
-    filterShoes(); // Filter shoes whenever category or shoes list changes
+    filterShoes();
   }, [selectedCategory, shoes]);
 
   const fetchShoes = async () => {
@@ -72,6 +76,16 @@ function Product({ userId }) {
     }
   };
 
+  // Logic to determine which shoes to display based on the current page
+  const indexOfLastShoe = currentPage * itemsPerPage;
+  const indexOfFirstShoe = indexOfLastShoe - itemsPerPage;
+  const currentShoes = filteredShoes.slice(indexOfFirstShoe, indexOfLastShoe);
+
+  // Handle page change
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
   const handleShoeClick = async (shoeId) => {
     try {
       const response = await axios.get(
@@ -116,6 +130,9 @@ function Product({ userId }) {
     }
   };
 
+  // Calculate total pages for pagination
+  const totalPages = Math.ceil(filteredShoes.length / itemsPerPage);
+
   return (
     <div className="min-h-screen bg-white text-gray-900 flex flex-col items-center py-8">
       <h2 className="text-2xl font-bold text-center text-black mb-6">
@@ -137,28 +154,26 @@ function Product({ userId }) {
         </select>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 px-4 sm:px-6 lg:px-8">
-        {filteredShoes.map((shoe) => (
+        {currentShoes.map((shoe) => (
           <div
             key={shoe.shoe_detail_id}
-            className="bg-gray-800 rounded-lg p-4 text-center relative group"
+            className="bg-gray-800 rounded-lg p-3 text-center relative group transform transition duration-300 ease-in-out hover:scale-105 hover:shadow-lg"
           >
-            <Link
-              to="#"
-              onClick={() => handleShoeClick(shoe.shoe_detail_id)} // Open modal on click
-            >
+            <Link to="#" onClick={() => handleShoeClick(shoe.shoe_detail_id)}>
+              {/* Gambar Produk */}
               <img
                 src={`/images/${shoe.shoe_name}.jpg`}
                 alt={shoe.shoe_name}
-                className="w-full h-60 object-cover rounded-lg mb-4"
+                className="w-full h-48 object-cover rounded-lg mb-4 transform transition duration-300 ease-in-out group-hover:scale-110 group-hover:border-2 group-hover:border-yellow-500"
               />
               <div className="text-center">
-                <span className="text-sm text-gray-400">
+                <span className="text-xs text-gray-400">
                   {getCategoryName(shoe.category_id)}
                 </span>
-                <h3 className="text-lg font-bold text-white mt-2">
+                <h3 className="text-sm font-bold text-white mt-2">
                   {shoe.shoe_name}
                 </h3>
-                <p className="text-md text-green-400 mt-2">
+                <p className="text-xs text-green-400 mt-2">
                   {shoe.shoe_price.toLocaleString("id-ID", {
                     style: "currency",
                     currency: "IDR",
@@ -166,20 +181,41 @@ function Product({ userId }) {
                 </p>
               </div>
             </Link>
+
+            {/* Ikon Favorit */}
             <div className="absolute top-4 right-4">
-              <button className="text-white text-lg hover:text-yellow-500">
+              <button className="text-white text-lg hover:text-yellow-500 transition duration-300 ease-in-out">
                 <i className="fas fa-heart"></i>
               </button>
             </div>
+
+            {/* Tombol Add to Cart */}
             <div className="absolute bottom-4 right-4">
               <button
-                className="text-white text-xl hover:text-yellow-500"
-                onClick={() => addToCart(shoe.shoe_detail_id, 1)} // Add to cart with quantity 1
+                className="text-white text-xl hover:text-yellow-500 transition duration-300 ease-in-out"
+                onClick={() => addToCart(shoe.shoe_detail_id, 1)}
               >
                 <i className="fas fa-plus"></i>
               </button>
             </div>
           </div>
+        ))}
+      </div>
+
+      {/* Pagination */}
+      <div className="pagination flex justify-center mt-8 space-x-2">
+        {Array.from({ length: totalPages }, (_, index) => (
+          <button
+            key={index}
+            onClick={() => handlePageChange(index + 1)}
+            className={`px-4 py-2 rounded ${
+              currentPage === index + 1
+                ? "bg-blue-500 text-white"
+                : "bg-gray-700 text-gray-300"
+            } hover:bg-blue-600 transition-colors`}
+          >
+            {index + 1}
+          </button>
         ))}
       </div>
 
@@ -217,7 +253,7 @@ function Product({ userId }) {
               </button>
               <button
                 className="bg-green-500 text-white p-2 rounded"
-                onClick={() => addToCart(selectedShoe.shoe_detail_id, 1)} // Add to cart with quantity 1
+                onClick={() => addToCart(selectedShoe.shoe_detail_id, 1)}
               >
                 Add to Cart
               </button>

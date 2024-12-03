@@ -1,123 +1,103 @@
-# data_training.py
-
 import pandas as pd
 from sqlalchemy import create_engine
-from sklearn.model_selection import StratifiedShuffleSplit
-from sklearn.preprocessing import StandardScaler
 from sklearn.decomposition import NMF
-import numpy as np
 from imblearn.over_sampling import SMOTE
 from models import ShoeRecomendationForUsers, db
 import joblib
 import logging
+import numpy as np
+from sklearn.preprocessing import StandardScaler
 
-# Menambahkan pengaturan logging
+# Menambahkan pengaturan logging untuk melacak progres dan error
 logging.basicConfig(level=logging.DEBUG)
 
 def train_nmf_model():
-    # Ganti dengan jalur absolut ke file database SQLite Anda
+    # Tentukan jalur file database SQLite Anda
     database_path = r'D:\Kuliah\V\RNR-Webstore\backend\instance\site.db'
-
-    # Membuat engine untuk menghubungkan ke SQLite
+    
+    # Membuat koneksi ke database SQLite menggunakan SQLAlchemy
     engine = create_engine(f'sqlite:///{database_path}')
 
     try:
+        # Membaca data interaksi pengguna dari tabel 'user_interaction' di database
         user_interactions = pd.read_sql_table('user_interaction', engine)
         logging.info(f'Data berhasil dibaca: {user_interactions.shape[0]} baris')
     except Exception as e:
+        # Menangani jika ada error saat membaca data
         logging.error(f'Error saat membaca data: {e}')
-        raise Exception(f'Error saat membaca data: {e}')
+        raise
 
-    # Mengubah jenis interaksi menjadi nilai biner untuk prediksi pembelian
+    # Mengubah kolom 'interaction_type' menjadi format numerik (0 untuk view/wishlist, 1 untuk cart/order)
     user_interactions['interaction_type'] = user_interactions['interaction_type'].map({
-        'view': 0,      # View tidak dianggap sebagai interaksi kuat
-        'wishlist': 0,  # Wishlist lebih ke preferensi
-        'cart': 1,      # Cart berarti pengguna tertarik
-        'order': 1      # Order berarti pembelian
-    }).fillna(0)  # Menangani nilai yang tidak dikenali
+        'view': 0, 'wishlist': 0, 'cart': 1, 'order': 1
+    }).fillna(0)  # Mengisi nilai kosong dengan 0 (interaksi tidak terjadi)
 
-    # Memastikan tidak ada missing values
-    user_interactions = user_interactions.fillna(user_interactions.mean())
+    # Menangani missing values dengan mengisi nilai kosong dengan rata-rata dari kolom yang sesuai
+    user_interactions = user_interactions.fillna(user_interactions.mean()).drop_duplicates()
 
-    # Menghapus duplikat data yang sudah ada
-    user_interactions = user_interactions.drop_duplicates()
+    # Menentukan fitur (X) dan target (y)
+    X = user_interactions[['id_user', 'shoe_detail_id']]  # Fitur menggunakan id_user dan shoe_detail_id
+    y = user_interactions['interaction_type']  # Target berupa interaction_type (0 atau 1)
 
-    # Menyiapkan fitur dan target (id_user dan shoe_detail_id sebagai fitur, interaction_type sebagai target)
-    X = user_interactions[['id_user', 'shoe_detail_id']]  # Fitur
-    y = user_interactions['interaction_type']  # Target (apakah interaksi terjadi)
-
-    # Membuat matriks pengguna-sepatu (user-item matrix)
+    # Membuat matriks user-item, di mana baris adalah pengguna dan kolom adalah sepatu, dengan nilai interaksi
     user_item_matrix = pd.pivot_table(user_interactions, index='id_user', columns='shoe_detail_id', values='interaction_type', fill_value=0)
-
     logging.info(f'Matriks interaksi pengguna-sepatu berukuran: {user_item_matrix.shape}')
 
-    # Menggunakan SMOTE untuk oversampling (untuk menghindari duplikasi langsung)
+    # Menggunakan SMOTE untuk melakukan oversampling pada kelas minoritas
     smote = SMOTE(random_state=42)
     X_resampled, y_resampled = smote.fit_resample(X, y)
 
-    # Membagi data menjadi data latih dan data uji secara stratifikasi
-    splitter = StratifiedShuffleSplit(n_splits=1, test_size=0.3, random_state=42)
-    for train_idx, test_idx in splitter.split(X_resampled, y_resampled):
-        X_train, X_test = X_resampled.iloc[train_idx], X_resampled.iloc[test_idx]
-        y_train, y_test = y_resampled.iloc[train_idx], y_resampled.iloc[test_idx]
+    # Membuat model NMF (Non-negative Matrix Factorization) untuk dekomposisi matriks
+    nmf_model = NMF(n_components=20, init='random', random_state=42, solver='mu', max_iter=200)
 
-    # Standarisasi data (tidak terlalu dibutuhkan untuk NMF, karena ini adalah dekomposisi matriks)
-    scaler = StandardScaler()
-    X_train_scaled = scaler.fit_transform(X_train)
-    X_test_scaled = scaler.transform(X_test)
-
-    # Model NMF
-    nmf_model = NMF(n_components=5, init='random', random_state=42)
-
-    # Melatih model NMF dengan matriks interaksi
     try:
+        # Melatih model NMF dengan matriks interaksi pengguna-sepatu
         nmf_model.fit(user_item_matrix)
         logging.info("Model NMF berhasil dilatih.")
     except Exception as e:
+        # Menangani error yang terjadi saat melatih model
         logging.error(f'Error saat melatih model NMF: {e}')
-        raise Exception(f'Error saat melatih model NMF: {e}')
+        raise
 
-    # Menghasilkan rekomendasi berdasarkan model NMF
-    W = nmf_model.transform(user_item_matrix)  # Matriks user-factors
-    H = nmf_model.components_  # Matriks item-factors
+    # Transformasi matriks user-item ke dalam bentuk matriks faktor pengguna (W) dan item (H)
+    W = nmf_model.transform(user_item_matrix)  # Matriks faktor pengguna
+    H = nmf_model.components_  # Matriks faktor item
 
-    # Prediksi interaksi antara pengguna dan sepatu berdasarkan faktor
+    # Menghitung prediksi interaksi pengguna dengan item (sepatu) berdasarkan faktor yang diperoleh
     predicted_interactions = np.dot(W, H)
-
-    # Mengubah hasil prediksi menjadi dataframe
+    # Mengubah hasil prediksi menjadi DataFrame untuk memudahkan pengolahan lebih lanjut
     recommendation_df = pd.DataFrame(predicted_interactions, columns=user_item_matrix.columns)
-
-    # Menampilkan rekomendasi untuk beberapa pengguna pertama
     logging.info(f'Rekomendasi pertama: {recommendation_df.head()}')
 
-    # Mengambil rekomendasi sepatu berdasarkan prediksi yang lebih tinggi (akan menjadi pembelian)
+    # Mengambil 10 sepatu teratas berdasarkan nilai prediksi tertinggi untuk setiap pengguna
     recommended_shoes = recommendation_df.apply(lambda row: row.nlargest(10).index.tolist(), axis=1)
 
-    # Menyimpan hasil ke database (tabel ShoeRecommendationForUser)
+    # Menyimpan hasil rekomendasi ke dalam database
     try:
         with db.session.begin():
-            # Mengosongkan tabel sebelumnya
+            # Menghapus data rekomendasi sebelumnya dari tabel ShoeRecomendationForUsers
             db.session.query(ShoeRecomendationForUsers).delete()
-
-            # Menyimpan hasil rekomendasi ke dalam database
+            # Menyimpan rekomendasi sepatu untuk setiap pengguna ke dalam tabel database
             for user_id, shoes in recommended_shoes.items():
                 for shoe in shoes:
-                    new_recommendation = ShoeRecomendationForUsers(
-                        id_user=user_id,
-                        shoe_detail_id=shoe
-                    )
-                    db.session.add(new_recommendation)
-
+                    # Memeriksa apakah rekomendasi sepatu untuk pengguna sudah ada di database
+                    existing_recommendation = db.session.query(ShoeRecomendationForUsers).filter_by(id_user=user_id, shoe_detail_id=shoe).first()
+                    if not existing_recommendation:
+                        # Jika belum ada, menambahkan rekomendasi baru ke database
+                        new_recommendation = ShoeRecomendationForUsers(id_user=user_id, shoe_detail_id=shoe)
+                        db.session.add(new_recommendation)
             db.session.commit()
             logging.info('Hasil rekomendasi berhasil disimpan ke database.')
     except Exception as e:
+        # Menangani error saat menyimpan hasil rekomendasi ke database
         logging.error(f'Error saat menyimpan hasil rekomendasi: {e}')
-        raise Exception(f'Error saat menyimpan hasil rekomendasi: {e}')
+        raise
 
-    # Menyimpan model NMF
+    # Menyimpan model NMF ke dalam file menggunakan joblib
     try:
         joblib.dump(nmf_model, 'nmf_model.pkl')
         logging.info("Model NMF berhasil disimpan!")
     except Exception as e:
+        # Menangani error saat menyimpan model
         logging.error(f'Error saat menyimpan model NMF: {e}')
-        raise Exception(f'Error saat menyimpan model NMF: {e}')
+        raise

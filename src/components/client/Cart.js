@@ -8,8 +8,9 @@ function Cart() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [showModal, setShowModal] = useState(false);
-  const [selectedItem, setSelectedItem] = useState(null); // Track selected cart item
-  const navigate = useNavigate();
+  const [selectedItem, setSelectedItem] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 8;
 
   const userId = localStorage.getItem("user_id");
   const token = localStorage.getItem("token");
@@ -86,6 +87,17 @@ function Cart() {
     setSelectedItem(null); // Clear selected item
   };
 
+  // Pagination logic
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentCartItems = cartItems.slice(indexOfFirstItem, indexOfLastItem);
+
+  const totalPages = Math.ceil(cartItems.length / itemsPerPage);
+
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;
 
@@ -99,7 +111,7 @@ function Cart() {
         <p>Your cart is empty.</p>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 px-4 sm:px-6 lg:px-8">
-          {cartItems.map((item) => {
+          {currentCartItems.map((item) => {
             const shoe = shoesDetails.find(
               (shoeDetail) => shoeDetail.shoe_detail_id === item.shoe_detail_id
             );
@@ -124,6 +136,41 @@ function Cart() {
           })}
         </div>
       )}
+
+      {/* Pagination */}
+      <div className="pagination flex justify-center mt-8 space-x-2">
+        <button
+          onClick={() => handlePageChange(currentPage - 1)}
+          disabled={currentPage === 1}
+          className="px-4 py-2 rounded bg-gray-700 text-gray-300 hover:bg-gray-600 transition-colors"
+        >
+          Previous
+        </button>
+
+        {Array.from({ length: totalPages }, (_, index) => index + 1).map(
+          (pageNumber) => (
+            <button
+              key={pageNumber}
+              onClick={() => handlePageChange(pageNumber)}
+              className={`px-4 py-2 rounded ${
+                currentPage === pageNumber
+                  ? "bg-blue-500 text-white"
+                  : "bg-gray-700 text-gray-300"
+              } hover:bg-blue-600 transition-colors`}
+            >
+              {pageNumber}
+            </button>
+          )
+        )}
+
+        <button
+          onClick={() => handlePageChange(currentPage + 1)}
+          disabled={currentPage === totalPages}
+          className="px-4 py-2 rounded bg-gray-700 text-gray-300 hover:bg-gray-600 transition-colors"
+        >
+          Next
+        </button>
+      </div>
 
       {/* Modal */}
       {showModal && selectedItem && (

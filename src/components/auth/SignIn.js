@@ -70,19 +70,19 @@ function SignIn({ onLogin }) {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-radial from-gray-800 via-gray-700 to-black">
-      <div className="bg-white p-10 rounded-lg shadow-lg w-full max-w-md">
-        <h1 className="text-3xl font-extrabold mb-2 text-center text-gray-800">
+      <div className="bg-white p-8 rounded-lg shadow-xl w-full max-w-md space-y-6">
+        <h1 className="text-4xl font-extrabold mb-4 text-center text-gray-800">
           Welcome Back!
         </h1>
-        <h2 className="text-xl font-semibold mb-6 text-center text-gray-600">
+        <h2 className="text-xl font-semibold mb-8 text-center text-gray-600">
           Please sign in to continue
         </h2>
 
-        <form className="space-y-5" onSubmit={handleSubmit}>
+        <form className="space-y-6" onSubmit={handleSubmit}>
           <div className="flex flex-col">
             <label
               htmlFor="username"
-              className="mb-1 font-semibold text-gray-700"
+              className="mb-2 font-semibold text-gray-700"
             >
               Username
             </label>
@@ -93,13 +93,14 @@ function SignIn({ onLogin }) {
               placeholder="Enter your username"
               value={credentials.username}
               onChange={handleChange}
-              className="border border-gray-300 p-3 rounded-lg text-black focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="border border-gray-300 p-4 rounded-lg text-black focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm"
             />
           </div>
+
           <div className="flex flex-col relative">
             <label
               htmlFor="password"
-              className="mb-1 font-semibold text-gray-700"
+              className="mb-2 font-semibold text-gray-700"
             >
               Password
             </label>
@@ -110,18 +111,19 @@ function SignIn({ onLogin }) {
               placeholder="Enter your password"
               value={credentials.password}
               onChange={handleChange}
-              className="border border-gray-300 p-3 rounded-lg text-black focus:outline-none focus:ring-2 focus:ring-blue-500 pr-10"
+              className="border border-gray-300 p-4 rounded-lg text-black focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm pr-12"
             />
             {/* Eye icon to toggle visibility */}
             <button
               type="button"
               onClick={togglePasswordVisibility}
-              className="absolute inset-y-9 right-4 text-gray-600 hover:text-gray-800 focus:outline-none"
+              className="absolute inset-y-0 right-4 text-gray-600 hover:text-gray-800 focus:outline-none"
             >
               {showPassword ? <FaEyeSlash size={20} /> : <FaEye size={20} />}
             </button>
           </div>
-          <div className="flex justify-between items-center mt-3">
+
+          <div className="flex justify-between items-center mt-4">
             <Link
               to="/forgot-password"
               className="text-sm text-blue-500 hover:underline"
@@ -130,7 +132,7 @@ function SignIn({ onLogin }) {
             </Link>
             <button
               type="submit"
-              className={`bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-lg shadow-lg transition-transform ${
+              className={`bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-6 rounded-lg shadow-lg transition-transform transform ${
                 loading ? "opacity-50 cursor-not-allowed" : "hover:scale-105"
               }`}
               disabled={loading}
@@ -140,7 +142,7 @@ function SignIn({ onLogin }) {
           </div>
         </form>
 
-        <p className="mt-8 text-center text-gray-700">
+        <p className="mt-6 text-center text-gray-700">
           Don’t have an account?{" "}
           <Link to="/signup" className="text-blue-500 hover:underline">
             Register

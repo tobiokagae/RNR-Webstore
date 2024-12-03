@@ -9,7 +9,7 @@
 }
 
 body {
-  font-family: 'Arial', sans-serif;
+  font-family: "Arial", sans-serif;
   background: radial-gradient(circle at center, #121212, #333);
   color: white;
 }
@@ -50,7 +50,8 @@ body {
   gap: 10px;
 }
 
-.signin, .signup {
+.signin,
+.signup {
   background: transparent;
   border: 2px solid white;
   color: white;
@@ -60,7 +61,8 @@ body {
   transition: background 0.3s ease;
 }
 
-.signin:hover, .signup:hover {
+.signin:hover,
+.signup:hover {
   background: white;
   color: black;
 }
@@ -98,4 +100,10 @@ body {
   width: 30px;
   height: 30px;
   background-color: white;
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr)); /* 4 kolom */
+  gap: 2rem; /* Sesuaikan jarak antar card */
 }

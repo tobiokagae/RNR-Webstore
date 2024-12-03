@@ -126,28 +126,16 @@ function AdminUser() {
     });
   };
 
-  const handleBack = () => {
-    navigate("/admin");
-  };
-
   return (
     <div className="bg-gray-900 text-white min-h-screen flex flex-col items-center p-8">
       <h1 className="text-3xl font-bold mb-6">Admin Users</h1>
-      <button
-        onClick={handleBack}
-        className="bg-blue-500 text-white px-4 py-2 rounded-md mb-6 hover:bg-blue-600 transition duration-300"
-      >
-        Kembali ke Admin
-      </button>
-
-      <button
+      {/* <button
         onClick={() => setModalIsOpen(true)}
         className="bg-blue-500 text-white px-4 py-2 rounded-md mb-6 hover:bg-blue-600 transition duration-300"
       >
         Create User
-      </button>
-
-      <div className="overflow-x-auto w-full">
+      </button> */}
+      <div className="overflow-x-auto w-full mt-5">
         <table className="table-auto w-full bg-gray-800 text-white rounded-lg shadow-md">
           <thead>
             <tr>
@@ -254,8 +242,7 @@ function AdminUser() {
           </tbody>
         </table>
       </div>
-
-      {/* Modal for Creating User */}
+      {/* Modal for Creating User
       <Modal
         isOpen={modalIsOpen}
         onRequestClose={() => setModalIsOpen(false)}
@@ -322,7 +309,7 @@ function AdminUser() {
         >
           Cancel
         </button>
-      </Modal>
+      </Modal> */}
     </div>
   );
 }
